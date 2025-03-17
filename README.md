@@ -1,4 +1,4 @@
-#How to run and test Alien Escape!:
+# How to run and test Alien Escape!:
 
 Package maven project and run tests using: mvn package
 Go to /project/target folder
