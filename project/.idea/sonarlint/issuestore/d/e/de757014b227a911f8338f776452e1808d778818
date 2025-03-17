@@ -1,0 +1,23 @@
+
+E
+java:S1066¾"/Merge this if statement with the enclosing one.(Èİ—2
+ƒ
+java:S1319"hThe type of "pathList" should be an interface such as "List" rather than the implementation "ArrayList".(·Œ€şÿÿÿÿ
+o
+java:S1104"TMake pathList a static final constant or non-public and provide accessors if needed.(·Œ€şÿÿÿÿ
+`
+java:S1659"EDeclare "goalNode" and all following declarations on a separate line.(ç¡›ºüÿÿÿÿ
+=
+java:S1125r"'Remove the unnecessary boolean literal.(‡¢ß«
+i
+java:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ê…â
+C
+java:S1125"'Remove the unnecessary boolean literal.(ï±óñıÿÿÿÿ
+Z
+java:S1155Ä">Use isEmpty() to check whether the collection is empty or not.(ÌŞŠğùÿÿÿÿ
+>
+java:S1125İ"'Remove the unnecessary boolean literal.(„·¨
+>
+java:S1125İ"'Remove the unnecessary boolean literal.(„·¨
+>
+java:S1125İ"'Remove the unnecessary boolean literal.(„·¨

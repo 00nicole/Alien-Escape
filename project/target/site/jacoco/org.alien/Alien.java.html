@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Alien.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.alien</a> &gt; <span class="el_source">Alien.java</span></div><h1>Alien.java</h1><pre class="source lang-java linenums">package org.alien;
+
+import java.io.IOException;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.util.*;
+import org.entity.Entity;
+import org.game.GameScreen;
+import java.awt.*;
+/**
+ * Alien class to represent enemies in the game
+ * 
+ * @author Ryan Chong
+ */
+public class Alien extends Entity{
+<span class="fc" id="L16">    private int counter = 0;</span>
+<span class="fc" id="L17">    public int attackTimer = 0;</span>
+<span class="fc" id="L18">    public boolean onPath = true;</span>
+    public int possible;
+<span class="fc" id="L20">    Random r = new Random();</span>
+
+    /**
+     * Alien constructor that takes in it's starting position
+     * 
+     * @param screen the gamescreen
+     * @param worldX the x position of the Alien
+     * @param worldY the y position of the Alien
+     */
+<span class="fc" id="L29">    public Alien(GameScreen screen,int worldX, int worldY){</span>
+<span class="fc" id="L30">        this.screen = screen;</span>
+
+<span class="fc" id="L32">        this.worldX = worldX * 44;</span>
+<span class="fc" id="L33">        this.worldY = worldY * 44;</span>
+
+<span class="fc" id="L35">        speed = 1;</span>
+<span class="fc" id="L36">        solidArea.x = 2;</span>
+<span class="fc" id="L37">        solidArea.y = 2;</span>
+<span class="fc" id="L38">        solidArea.width = 30;</span>
+<span class="fc" id="L39">        solidArea.height = 30;</span>
+
+<span class="fc" id="L41">        solidAreaDefaultX = solidArea.x;</span>
+<span class="fc" id="L42">        solidAreaDefaultY = solidArea.y;</span>
+
+<span class="fc" id="L44">        getImage();</span>
+<span class="fc" id="L45">    }</span>
+
+    public void getImage() {
+
+        try{
+
+<span class="nc" id="L51">        b1 = ImageIO.read(getClass().getResourceAsStream(&quot;/alien/green/alien_green_d1&quot;));</span>
+<span class="nc" id="L52">        b2 = ImageIO.read(getClass().getResourceAsStream(&quot;/alien/green/alien_green_d2&quot;));</span>
+
+<span class="nc" id="L54">        } catch (IOException e) {</span>
+<span class="nc" id="L55">            e.printStackTrace();</span>
+<span class="nc" id="L56">        }</span>
+<span class="nc" id="L57">    }</span>
+    
+    public int searchPath(int goalCol, int goalRow){
+
+<span class="fc" id="L61">        int startCol = (worldX + solidArea.x) / screen.tileSize;</span>
+<span class="fc" id="L62">        int startRow = (worldY + solidArea.y) / screen.tileSize;</span>
+<span class="fc" id="L63">        screen.pFinder.setNodes(startCol, startRow, goalCol, goalRow);</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if(screen.pFinder.search() == true){</span>
+<span class="fc" id="L66">            int nextX = screen.pFinder.pathList.get(0).col * screen.tileSize;</span>
+<span class="fc" id="L67">            int nextY = screen.pFinder.pathList.get(0).row * screen.tileSize;</span>
+
+<span class="fc" id="L69">            int enLeftX = worldX + solidArea.x;</span>
+<span class="fc" id="L70">            int enRightX = worldX + solidArea.x + solidArea.width;</span>
+<span class="fc" id="L71">            int enTopY = worldY + solidArea.y;</span>
+<span class="fc" id="L72">            int enBottomY = worldY + solidArea.y + solidArea.height;</span>
+            
+<span class="fc bfc" id="L74" title="All 6 branches covered.">            if(enTopY &gt; nextY &amp;&amp; enLeftX &gt;= nextX &amp;&amp; enRightX &lt; nextX + screen.tileSize){</span>
+<span class="fc" id="L75">                side = &quot;up&quot;;</span>
+            }
+<span class="pc bpc" id="L77" title="2 of 6 branches missed.">            else if(enTopY &lt; nextY &amp;&amp; enLeftX &gt;= nextX &amp;&amp; enRightX &lt; nextX + screen.tileSize){</span>
+<span class="fc" id="L78">                side = &quot;down&quot;;</span>
+            }
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">            else if(enTopY &gt;= nextY &amp;&amp; enBottomY &lt; nextY + screen.tileSize){</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                if(enLeftX &gt; nextX){</span>
+<span class="fc" id="L82">                    side = &quot;left&quot;;</span>
+                }
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                if(enLeftX &lt; nextX){</span>
+<span class="fc" id="L85">                    side = &quot;right&quot;;</span>
+                }
+            }
+<span class="nc bnc" id="L88" title="All 4 branches missed.">            else if(enTopY &gt; nextY &amp;&amp; enLeftX &gt; nextX){</span>
+<span class="nc" id="L89">                side = &quot;up&quot;;</span>
+<span class="nc" id="L90">                collisionOn = false;</span>
+<span class="nc" id="L91">                screen.cChecker.checkTile(this);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if(collisionOn == true){</span>
+<span class="nc" id="L93">                    side = &quot;left&quot;;</span>
+                }
+            }
+<span class="nc bnc" id="L96" title="All 4 branches missed.">            else if(enTopY &gt; nextY &amp;&amp; enLeftX &lt; nextX){</span>
+<span class="nc" id="L97">                side = &quot;up&quot;;</span>
+<span class="nc" id="L98">                collisionOn = false;</span>
+<span class="nc" id="L99">                screen.cChecker.checkTile(this);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if(collisionOn == true){</span>
+<span class="nc" id="L101">                    side = &quot;right&quot;;</span>
+                }
+            }
+<span class="nc bnc" id="L104" title="All 4 branches missed.">            else if(enTopY &lt; nextY &amp;&amp; enLeftX &gt; nextX){</span>
+<span class="nc" id="L105">                side = &quot;down&quot;;</span>
+<span class="nc" id="L106">                collisionOn = false;</span>
+<span class="nc" id="L107">                screen.cChecker.checkTile(this);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                if(collisionOn == true){</span>
+<span class="nc" id="L109">                    side = &quot;left&quot;;</span>
+                }
+            }
+<span class="nc bnc" id="L112" title="All 4 branches missed.">            else if(enTopY &lt; nextY &amp;&amp; enLeftX &lt; nextX){</span>
+<span class="nc" id="L113">                side = &quot;down&quot;;</span>
+<span class="nc" id="L114">                collisionOn = false;</span>
+<span class="nc" id="L115">                screen.cChecker.checkTile(this);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                if(collisionOn == true){</span>
+                    
+<span class="nc" id="L118">                    side = &quot;right&quot;;</span>
+                }
+            }
+<span class="fc" id="L121">            return 1;</span>
+        }
+        else
+        {
+<span class="fc" id="L125">            return 0;</span>
+        }
+    }  
+
+    public void update(){
+
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if(onPath == true){</span>
+<span class="fc" id="L132">            int goalCol = (screen.player.worldX + screen.player.solidArea.x) / screen.tileSize;</span>
+<span class="fc" id="L133">            int goalRow = (screen.player.worldY + screen.player.solidArea.y) / screen.tileSize;</span>
+
+<span class="fc" id="L135">            possible = searchPath(goalCol,goalRow);</span>
+<span class="fc" id="L136">            collisionOn = false;</span>
+<span class="fc" id="L137">            screen.cChecker.checkTile((this));</span>
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">            if(possible == 0)</span>
+            {   
+<span class="fc" id="L141">                counter++;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">                if(counter &gt;= 60){</span>
+<span class="nc" id="L143">                int random = r.nextInt(4);</span>
+<span class="nc" id="L144">                counter = 0;</span>
+                
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if(random == 0){</span>
+<span class="nc" id="L147">                        side = &quot;up&quot;;</span>
+                    }
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                    else if (random == 1){</span>
+<span class="nc" id="L150">                        side = &quot;down&quot;;</span>
+                    }
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    else if (random == 2){</span>
+<span class="nc" id="L153">                        side = &quot;left&quot;;</span>
+                    }
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                    else if (random == 3){</span>
+<span class="nc" id="L156">                        side = &quot;right&quot;;</span>
+                    }
+                }
+            }
+
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            if(collisionOn == false){</span>
+<span class="fc" id="L162">                move(side);</span>
+            }
+        
+<span class="fc" id="L165">            sideSwitcher++;</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if(sideSwitcher &gt;15){</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if(sideNum == 1){</span>
+<span class="nc" id="L168">                    sideNum =2;</span>
+                }
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                else if(sideNum == 2){</span>
+<span class="nc" id="L171">                    sideNum= 1;</span>
+                }
+<span class="nc" id="L173">                sideSwitcher =0;</span>
+            }
+        }
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if(attackTimer &gt; 0){</span>
+<span class="fc" id="L178">            attackTimer --;</span>
+        }
+<span class="fc" id="L180">    }</span>
+
+    public void draw(Graphics2D myGraphics,GameScreen screen){
+<span class="nc" id="L183">        BufferedImage img = null;</span>
+        
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if(sideNum ==1)</span>
+<span class="nc" id="L186">                 img = b1;</span>
+             
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        else if(sideNum ==2)</span>
+<span class="nc" id="L189">                 img = b2;</span>
+        
+<span class="nc" id="L191">        myGraphics.drawImage(img, worldX, worldY, screen.tileSize, screen.tileSize, null);</span>
+<span class="nc" id="L192">     }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

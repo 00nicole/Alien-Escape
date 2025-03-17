@@ -1,0 +1,20 @@
+
+g
+java:S1104"QMake image a static final constant or non-public and provide accessors if needed.(“×ªé
+k
+java:S1104"UMake Rectangle a static final constant or non-public and provide accessors if needed.(ÇÀÁè
+n
+java:S1104"XMake rectDefaultX a static final constant or non-public and provide accessors if needed.(·­•“
+n
+java:S1104"XMake rectDefaultY a static final constant or non-public and provide accessors if needed.(·­•“
+m
+java:S1104"RMake worldX a static final constant or non-public and provide accessors if needed.(ª‡ãìýÿÿÿÿ
+m
+java:S1104"RMake worldY a static final constant or non-public and provide accessors if needed.(ª‡ãìýÿÿÿÿ
+n
+java:S1104"SMake partner a static final constant or non-public and provide accessors if needed.(Þ‡Ñßûÿÿÿÿ
+i	java:S116"TRename this field "Rectangle" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÇÀÁè
+@
+java:S1659"*Declare "rectDefaultY" on a separate line.(·­•“
+?
+java:S1659"$Declare "worldY" on a separate line.(ª‡ãìýÿÿÿÿ

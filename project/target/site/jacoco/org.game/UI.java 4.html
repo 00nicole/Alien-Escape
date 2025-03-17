@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">UI.java</span></div><h1>UI.java</h1><pre class="source lang-java linenums">package org.game;
+
+import org.object.Heart;
+import org.object.RegularReward;
+import org.object.SuperObject;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
+
+import javax.imageio.ImageIO;
+
+public class UI {
+    GameScreen screen;
+    //Font arial_25, arial_70BI,arial_45;
+    Font pixelmix;
+    public BufferedImage regRewardImg, full, half, empty, titleImg;
+<span class="fc" id="L20">    public boolean textFlag = false;</span>
+<span class="fc" id="L21">    public String text = &quot;&quot;;</span>
+<span class="fc" id="L22">    int textCounter = 0;</span>
+<span class="fc" id="L23">    public boolean endGame = false;</span>
+    double onTime;
+<span class="fc" id="L25">    DecimalFormat deci = new DecimalFormat(&quot;0.0&quot;);</span>
+    Graphics2D myGraphics;
+<span class="fc" id="L27">    public int commandNum = 0;</span>
+<span class="fc" id="L28">    int subState = 0;</span>
+
+
+
+<span class="fc" id="L32">    public UI (GameScreen screen) {</span>
+<span class="fc" id="L33">        this.screen = screen;</span>
+        try {
+<span class="fc" id="L35">            InputStream stream = getClass().getResourceAsStream(&quot;/font/pixelmix.ttf&quot;);</span>
+<span class="fc" id="L36">            pixelmix = Font.createFont(Font.TRUETYPE_FONT, stream);</span>
+<span class="nc" id="L37">        } catch (FontFormatException | IOException e) {</span>
+<span class="nc" id="L38">            e.printStackTrace();</span>
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">        RegularReward planet = new RegularReward();</span>
+<span class="fc" id="L41">        regRewardImg = planet.image;</span>
+
+<span class="fc" id="L43">        SuperObject heart = new Heart(screen);</span>
+<span class="fc" id="L44">        full = heart.image;</span>
+<span class="fc" id="L45">        half = heart.image2;</span>
+<span class="fc" id="L46">        empty = heart.image3;</span>
+<span class="fc" id="L47">    }</span>
+    public void showMessage (String msg) {
+<span class="fc" id="L49">        text = msg;</span>
+<span class="fc" id="L50">        textFlag = true;</span>
+<span class="fc" id="L51">    }</span>
+
+    public void draw (Graphics2D graphics){
+<span class="fc" id="L54">        this.myGraphics = graphics;</span>
+<span class="fc" id="L55">        myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L56">        myGraphics.setColor(Color.YELLOW);</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if(screen.gameState == screen.titleState){</span>
+<span class="fc" id="L59">            drawTitleScreen();</span>
+        }
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">        if(screen.playState1&lt;=screen.gameState &amp;&amp; screen.gameState &lt;= screen.playState6){</span>
+<span class="fc" id="L62">            displayTime();</span>
+<span class="fc" id="L63">            displayPlanetReward();</span>
+<span class="fc" id="L64">            drawLife();</span>
+<span class="fc" id="L65">            displayScore();</span>
+        }
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if(screen.gameState == screen.pauseState){</span>
+<span class="nc" id="L68">            drawLife();</span>
+<span class="nc" id="L69">            displayPause();       </span>
+        }
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if(screen.gameState == screen.winState){</span>
+<span class="nc" id="L72">            displayWinState();</span>
+        }
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if(screen.gameState == screen.lossState){</span>
+<span class="nc" id="L75">            drawGameOverScreen();</span>
+        }
+<span class="fc" id="L77">    }</span>
+
+    
+
+    public void drawLife(){
+<span class="fc" id="L82">        int x = screen.tileSize*18;</span>
+<span class="fc" id="L83">        int y = screen.tileSize*11+12;</span>
+<span class="fc" id="L84">        int i = 0;</span>
+        //draws empty health
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        while(i&lt;screen.player.maxLife/2){</span>
+<span class="fc" id="L87">            myGraphics.drawImage(empty, x, y, null);</span>
+<span class="fc" id="L88">            i++;</span>
+<span class="fc" id="L89">            x+= screen.tileSize;</span>
+        }
+        //draw current player health
+<span class="fc" id="L92">        x = screen.tileSize *18;</span>
+<span class="fc" id="L93">        y = screen.tileSize *11+12;</span>
+<span class="fc" id="L94">        i=0;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        while(i&lt;screen.player.life){</span>
+<span class="fc" id="L96">            myGraphics.drawImage(half, x,y,null);</span>
+<span class="fc" id="L97">            i++;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if(i&lt;screen.player.life){</span>
+<span class="fc" id="L99">                myGraphics.drawImage(full, x,y,null);</span>
+            }
+<span class="fc" id="L101">            i++;</span>
+<span class="fc" id="L102">            x+= screen.tileSize;</span>
+        }
+<span class="fc" id="L104">    }</span>
+
+    public void displayTime(){
+            //Displaying Playing Time
+<span class="fc" id="L108">            onTime+=(double)1/60;</span>
+<span class="fc" id="L109">            myGraphics.setColor(Color.WHITE); //Planet RGB 55,99,116</span>
+<span class="fc" id="L110">            myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+<span class="fc" id="L111">            myGraphics.drawString(deci.format(onTime),screen.tileSize*9, screen.tileSize*12-3);</span>
+
+            //Displaying Message for Collecting Regular Reward
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if(textFlag) {</span>
+<span class="nc" id="L115">                myGraphics.setColor(new Color(55,99,116)); //Planet RGB</span>
+                //myGraphics.setFont(myGraphics.getFont().deriveFont(32F));
+<span class="nc" id="L117">                myGraphics.drawString(text, screen.tileSize *6, 30);</span>
+<span class="nc" id="L118">                textCounter++;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                if (textCounter &gt; 60) {</span>
+<span class="nc" id="L120">                    textCounter = 0;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                    textFlag = !textFlag;</span>
+                }
+            }
+<span class="fc" id="L124">    }</span>
+
+    public void displayPlanetReward(){
+<span class="fc" id="L127">        myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L128">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+<span class="fc" id="L129">        myGraphics.setColor(new Color(55,99,116)); //Planet RGB</span>
+<span class="fc" id="L130">        myGraphics.drawImage(regRewardImg, screen.tileSize*1,0,screen.tileSize,screen.tileSize,null);</span>
+<span class="fc" id="L131">        myGraphics.drawString(&quot; x&quot; + screen.player.hasPlanet,screen.tileSize*2, screen.tileSize-11);</span>
+<span class="fc" id="L132">    }</span>
+
+    public void displayScore(){
+<span class="fc" id="L135">        myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L136">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+<span class="fc" id="L137">        myGraphics.setColor(Color.WHITE); //Planet RGB</span>
+<span class="fc" id="L138">        myGraphics.drawString(&quot; &quot;+screen.player.score,screen.tileSize*14+16, screen.tileSize*12-2);</span>
+<span class="fc" id="L139">    }</span>
+
+    public void displayWinState(){
+            String msg;
+            int msgLen;
+            int x,y;
+
+            //Displaying Game Won on Screen
+<span class="fc" id="L147">            myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L148">            myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,100F));</span>
+            //graphics.setColor(new Color(109,95,153)); //Purple RGB
+<span class="fc" id="L150">            myGraphics.setColor(Color.yellow);</span>
+<span class="fc" id="L151">            msg = &quot;Game Won!&quot;;</span>
+<span class="fc" id="L152">            x = screenCenterX(msg);</span>
+<span class="fc" id="L153">            y = screen.screenHeight/2 - (screen.tileSize*3);</span>
+<span class="fc" id="L154">            myGraphics.drawString(msg, x, y);</span>
+
+<span class="fc" id="L156">            myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+            //Displaying Planets Collected, or can be any win statement
+<span class="fc" id="L158">            msg = &quot;Final Score: &quot; + screen.player.score;</span>
+<span class="fc" id="L159">            msgLen = (int)myGraphics.getFontMetrics().getStringBounds(msg,myGraphics).getWidth();</span>
+<span class="fc" id="L160">            x = screen.screenWidth/2 - msgLen/2;</span>
+<span class="fc" id="L161">            y = screen.screenHeight/2 - (screen.tileSize*2);</span>
+<span class="fc" id="L162">            myGraphics.drawString(msg, x, y);</span>
+
+            //Displaying Time
+<span class="fc" id="L165">            msg = &quot;You Played: &quot; + deci.format(onTime)+&quot; seconds.&quot;;</span>
+<span class="fc" id="L166">            msgLen = (int)myGraphics.getFontMetrics().getStringBounds(msg,myGraphics).getWidth();</span>
+<span class="fc" id="L167">            x = screen.screenWidth/2 - msgLen/2;</span>
+<span class="fc" id="L168">            y = screen.screenHeight/2 - (screen.tileSize);</span>
+<span class="fc" id="L169">            myGraphics.drawString(msg, x, y);</span>
+
+<span class="fc" id="L171">            myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,100F));</span>
+            //Displaying Congratulations
+<span class="fc" id="L173">            myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L174">            myGraphics.setColor(Color.orange);</span>
+<span class="fc" id="L175">            msg = &quot;Congratulations!!&quot;;</span>
+<span class="fc" id="L176">            msgLen = (int)myGraphics.getFontMetrics().getStringBounds(msg,myGraphics).getWidth();</span>
+<span class="fc" id="L177">            x = screen.screenWidth/2 - msgLen/2;</span>
+<span class="fc" id="L178">            y = screen.screenHeight/2 + (screen.tileSize*2);</span>
+<span class="fc" id="L179">            myGraphics.drawString(msg, x, y);</span>
+
+            //To Stop the Game
+<span class="fc" id="L182">            screen.gameThread = null;</span>
+<span class="fc" id="L183">    }</span>
+    
+    /**
+     * Draws the Game Over screen on the graphics context
+     * The method sets the background color with partial transparency, fill the screen,
+     * and displays the &quot;Game Over&quot; text along with the options to retry or quit.
+     * &lt;p&gt;
+     * The &quot;Game Over&quot; text displayed with font size of 110 and retry and quit options
+     * are displayed with font size of 50.
+     * The selected option is indicated with a &quot;&gt;&quot; symbol
+     * 
+     * @author Curtis Pu
+     * @author Nicole Malku
+     */
+    public void drawGameOverScreen(){
+<span class="fc" id="L198">        myGraphics.setColor(new Color(153, 51, 153, 150));</span>
+<span class="fc" id="L199">        myGraphics.fillRect(0, 0, screen.screenWidth, screen.screenHeight);</span>
+
+        int x;
+        int y;
+        String text;
+<span class="fc" id="L204">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,110F));</span>
+
+<span class="fc" id="L206">        text = &quot;Game Over!&quot;;</span>
+<span class="fc" id="L207">        myGraphics.setColor(Color.black);</span>
+<span class="fc" id="L208">        x = screenCenterX(text);</span>
+<span class="fc" id="L209">        y = screen.tileSize * 4;</span>
+<span class="fc" id="L210">        myGraphics.drawString(text, x, y);</span>
+<span class="fc" id="L211">        myGraphics.setColor(Color.white);</span>
+<span class="fc" id="L212">        myGraphics.drawString(text, x - 4, y - 4);</span>
+
+<span class="fc" id="L214">        myGraphics.setFont(myGraphics.getFont().deriveFont(25f));</span>
+<span class="fc" id="L215">        myGraphics.setColor(Color.black);</span>
+<span class="fc" id="L216">        myGraphics.drawString(&quot;Final Score: &quot; + screen.player.score, screen.tileSize*2 ,screen.tileSize*6);</span>
+<span class="fc" id="L217">        myGraphics.drawString(&quot;Time: &quot; + deci.format(onTime) + &quot; seconds&quot;, screen.tileSize*11 ,screen.tileSize*6);</span>
+<span class="fc" id="L218">        myGraphics.drawString(&quot;Retry&quot;, screen.tileSize*6 ,screen.tileSize*8);</span>
+<span class="fc" id="L219">        myGraphics.drawString(&quot;Quit&quot;, screen.tileSize*6, screen.tileSize*10);</span>
+    
+<span class="fc" id="L221">        myGraphics.setColor(Color.white);</span>
+<span class="fc" id="L222">        myGraphics.drawString(&quot;Final Score: &quot; + screen.player.score, screen.tileSize*2-4 ,screen.tileSize*6-4);</span>
+<span class="fc" id="L223">        myGraphics.drawString(&quot;Time: &quot; + deci.format(onTime)+ &quot; seconds&quot;, screen.tileSize*11-4 ,screen.tileSize*6-4);</span>
+<span class="fc" id="L224">        myGraphics.drawString(&quot;Retry&quot;, screen.tileSize*6-4 ,screen.tileSize*8-4);</span>
+<span class="fc" id="L225">        myGraphics.drawString(&quot;Quit&quot;, screen.tileSize*6-4, screen.tileSize*10-4);</span>
+
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if(commandNum == 0){</span>
+<span class="fc" id="L228">            myGraphics.setColor(Color.BLACK);</span>
+<span class="fc" id="L229">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize*6-40, screen.tileSize*8);</span>
+<span class="fc" id="L230">            myGraphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L231">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize*6-44, screen.tileSize*8-4);</span>
+            
+        }
+
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if(commandNum == 1){</span>
+<span class="fc" id="L236">            myGraphics.setColor(Color.BLACK);</span>
+<span class="fc" id="L237">            myGraphics.drawString(&quot;&gt;&quot;,screen.tileSize*6-40, screen.tileSize*10);</span>
+<span class="fc" id="L238">            myGraphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L239">            myGraphics.drawString(&quot;&gt;&quot;,screen.tileSize*6-44, screen.tileSize*10-4);</span>
+        }
+
+<span class="fc" id="L242">    }</span>
+
+    public void displayPause(){
+        //myGraphics.setFont(myGraphics.getFont().deriveFont(Font.PLAIN,80F));
+        /*String msg = &quot;Game Paused.&quot;;
+        int x, y;
+        x = screenCenterX(msg);
+        y = screen.screenHeight/2;
+        myGraphics.drawString(msg,x,y);
+        */
+<span class="fc" id="L252">        int windowX= screen.tileSize*5;</span>
+<span class="fc" id="L253">        int windowY = screen.tileSize;</span>
+<span class="fc" id="L254">        int windowW = screen.tileSize*11;</span>
+<span class="fc" id="L255">        int windowH = screen.tileSize*10;</span>
+<span class="fc" id="L256">        drawWindow(windowX, windowY, windowW, windowH);</span>
+<span class="pc bpc" id="L257" title="1 of 4 branches missed.">        switch(subState){</span>
+        case 0: 
+<span class="fc" id="L259">            menu_title();</span>
+<span class="fc" id="L260">            break;</span>
+        case 1: 
+<span class="fc" id="L262">            how_to_play();</span>
+<span class="fc" id="L263">            break;</span>
+        case 2: 
+<span class="fc" id="L265">            end_game();</span>
+            break;
+        }
+<span class="fc" id="L268">        screen.keyInput.enterPressed = false;</span>
+<span class="fc" id="L269">    }</span>
+
+    public void menu_title(){
+<span class="fc" id="L272">        String txt1 = &quot;~Game Paused~&quot;;</span>
+<span class="fc" id="L273">        String txt2 = &quot;Options:&quot;;</span>
+<span class="fc" id="L274">        myGraphics.setFont(pixelmix);</span>
+<span class="fc" id="L275">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+<span class="fc" id="L276">        myGraphics.setColor(Color.WHITE); //Planet RGB</span>
+<span class="fc" id="L277">        myGraphics.drawString(txt1, screen.tileSize *8 +6, screen.tileSize*2-6);</span>
+<span class="fc" id="L278">        myGraphics.drawString(txt2, screen.tileSize *6-9, screen.tileSize*3-6);</span>
+
+        // change music vol
+<span class="fc" id="L281">        myGraphics.drawString(&quot;Music Volume&quot;, screen.tileSize *6 +6, screen.tileSize*4-6);</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if(commandNum ==0){</span>
+<span class="fc" id="L283">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L284">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*4-6);</span>
+<span class="fc" id="L285">            myGraphics.setColor(Color.WHITE);</span>
+        }
+        // sfx vol
+<span class="fc" id="L288">        myGraphics.drawString(&quot;SFX Volume&quot;, screen.tileSize *6 +6, screen.tileSize*5-6);</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if(commandNum ==1){</span>
+<span class="fc" id="L290">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L291">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*5-6);</span>
+<span class="fc" id="L292">            myGraphics.setColor(Color.WHITE);</span>
+        }
+       /*  myGraphics.drawString(&quot;Change Controls&quot;, screen.tileSize *6 +6, screen.tileSize*6-6);
+        if(commandNum ==2){
+            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*6-6);
+        } */
+        // how to play
+<span class="fc" id="L299">        myGraphics.drawString(&quot;How to Play&quot;, screen.tileSize *6 +6, screen.tileSize*6-6);</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if(commandNum ==2){</span>
+<span class="fc" id="L301">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L302">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*6-6);</span>
+<span class="fc" id="L303">            myGraphics.setColor(Color.WHITE);</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L305">                subState =1;</span>
+<span class="nc" id="L306">                commandNum =0;</span>
+            }
+        }
+        //exit
+<span class="fc" id="L310">        myGraphics.drawString(&quot;Exit Game&quot;, screen.tileSize *6 +6, screen.tileSize*9-6);</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        if(commandNum ==3){</span>
+<span class="fc" id="L312">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L313">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*9-6);</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L315">                subState = 2;</span>
+<span class="nc" id="L316">                commandNum =0;</span>
+            }
+<span class="fc" id="L318">            myGraphics.setColor(Color.WHITE);</span>
+        }
+
+        // unpause
+
+<span class="fc" id="L323">        myGraphics.drawString(&quot;Back&quot;, screen.tileSize *6 +6, screen.tileSize*10-6);</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        if(commandNum ==4){</span>
+<span class="fc" id="L325">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L326">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *6-10, screen.tileSize*10-6);</span>
+<span class="fc" id="L327">            myGraphics.setColor(Color.WHITE);</span>
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L329">                screen.gameState = screen.latestPlayState;</span>
+<span class="nc" id="L330">                commandNum =0;</span>
+            }
+        }
+        
+        // music slider
+<span class="fc" id="L335">        myGraphics.setStroke(new BasicStroke(3));</span>
+<span class="fc" id="L336">        myGraphics.drawRect(screen.tileSize*12, screen.tileSize*3+20, 120, 24); </span>
+<span class="fc" id="L337">        int volW = 24* screen.music.volSlider;</span>
+<span class="fc" id="L338">        myGraphics.fillRect(screen.tileSize*12, screen.tileSize*3+20,volW, 24);</span>
+
+        // SFX slider
+<span class="fc" id="L341">        myGraphics.drawRect(screen.tileSize*12, screen.tileSize*4+20, 120, 24);</span>
+<span class="fc" id="L342">        int volW2 = 24* screen.sfx.volSlider;</span>
+<span class="fc" id="L343">        myGraphics.fillRect(screen.tileSize*12, screen.tileSize*4+20,volW2, 24);</span>
+<span class="fc" id="L344">    }</span>
+
+    public void how_to_play(){
+<span class="fc" id="L347">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,15F));</span>
+<span class="fc" id="L348">        myGraphics.setColor(Color.green);</span>
+<span class="fc" id="L349">        myGraphics.drawString(&quot;Welcome to Alien Escape!&quot;,screen.tileSize *7 -7, screen.tileSize*2-6);</span>
+<span class="fc" id="L350">        myGraphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L351">        myGraphics.drawString(&quot;Aliens have stolen the planets. Grab&quot;, screen.tileSize *5 +12, screen.tileSize*3-6);</span>
+<span class="fc" id="L352">        myGraphics.drawString(&quot;each planet, and escape to the rocket!&quot;, screen.tileSize *5 +12, screen.tileSize*4-6);</span>
+<span class="fc" id="L353">        myGraphics.drawString(&quot;Avoid all Aliens and Poison!&quot;, screen.tileSize *5 +12, screen.tileSize*5-6);</span>
+<span class="fc" id="L354">        myGraphics.drawString(&quot;Grab special stars to double your score.&quot;, screen.tileSize *5 +12, screen.tileSize*6-6);</span>
+<span class="fc" id="L355">        myGraphics.setColor(Color.ORANGE);</span>
+<span class="fc" id="L356">        myGraphics.drawString(&quot;W,A,S,D to move&quot;, screen.tileSize *5 +12, screen.tileSize*7-6);</span>
+<span class="fc" id="L357">        myGraphics.drawString(&quot;Enter key for selections&quot;, screen.tileSize *5 +12, screen.tileSize*8-6);</span>
+<span class="fc" id="L358">        myGraphics.drawString(&quot;Up &amp; down arrows for volume adustments&quot;, screen.tileSize *5 +12, screen.tileSize*9-6);</span>
+<span class="fc" id="L359">        myGraphics.drawString(&quot;P or ESC key to toggle pause/options&quot;, screen.tileSize *5 +12, screen.tileSize*10-6);</span>
+        
+    
+<span class="fc" id="L362">        myGraphics.drawString(&quot;Back&quot;,screen.tileSize *14 +12, screen.tileSize*11-19);</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">        if(commandNum == 0){</span>
+<span class="fc" id="L364">            myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L365">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *14-4, screen.tileSize*11-19);</span>
+<span class="fc" id="L366">            myGraphics.setColor(Color.WHITE);</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L368">                subState =0;</span>
+<span class="nc" id="L369">                commandNum =2;</span>
+<span class="nc" id="L370">                screen.gameState = screen.latestPlayState;</span>
+            }
+        }
+    
+<span class="fc" id="L374">    }</span>
+
+    public void end_game(){
+<span class="fc" id="L377">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,20F));</span>
+<span class="fc" id="L378">        myGraphics.setColor(Color.cyan);</span>
+<span class="fc" id="L379">        myGraphics.drawString(&quot;Are you sure you'd like to quit?&quot;,screen.tileSize *5 + 22, screen.tileSize*4-6);</span>
+<span class="fc" id="L380">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+<span class="fc" id="L381">        myGraphics.setColor(Color.WHITE);</span>
+<span class="fc" id="L382">        myGraphics.drawString(&quot;Yes.&quot;,screen.tileSize *7 +7, screen.tileSize*7-6);</span>
+<span class="fc" id="L383">        myGraphics.drawString(&quot;No!&quot;,screen.tileSize *11 -7, screen.tileSize*7-6);</span>
+
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if(commandNum ==0){</span>
+<span class="fc" id="L386">            myGraphics.setColor(Color.cyan);</span>
+<span class="fc" id="L387">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *7-10, screen.tileSize*7-6);</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L389">                screen.stopMusic();</span>
+<span class="nc" id="L390">                screen.startSFX(7);</span>
+                try {
+<span class="nc" id="L392">                    Thread.sleep(700);              </span>
+<span class="nc" id="L393">                } catch(InterruptedException ex) {</span>
+<span class="nc" id="L394">                    Thread.currentThread().interrupt();</span>
+<span class="nc" id="L395">                }</span>
+<span class="nc" id="L396">                screen.startMusic(4);</span>
+<span class="nc" id="L397">                subState =0;</span>
+<span class="nc" id="L398">                screen.gameState = screen.titleState;</span>
+
+            }
+        }
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if(commandNum ==1){</span>
+<span class="fc" id="L403">            myGraphics.setColor(Color.cyan);</span>
+<span class="fc" id="L404">            myGraphics.drawString(&quot;&gt;&quot;, screen.tileSize *11-24, screen.tileSize*7-6);</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">            if(screen.keyInput.enterPressed == true){</span>
+<span class="nc" id="L406">                subState=0;</span>
+<span class="nc" id="L407">                commandNum = 3;</span>
+            }
+
+        }
+<span class="fc" id="L411">    }</span>
+
+
+
+    public void drawWindow(int x, int y, int w, int h){
+<span class="fc" id="L416">        myGraphics.setColor(new Color(0,0,0, 200));</span>
+<span class="fc" id="L417">        myGraphics.fillRoundRect(x, y, w, h, 35, 35);</span>
+<span class="fc" id="L418">        myGraphics.setColor(Color.PINK);</span>
+<span class="fc" id="L419">        myGraphics.setStroke(new BasicStroke(5));</span>
+<span class="fc" id="L420">        myGraphics.drawRoundRect(x+5, y+5, w-10, h-10, 25, 25);</span>
+<span class="fc" id="L421">    }</span>
+    public int screenCenterX(String msg){
+<span class="fc" id="L423">        int len = (int)myGraphics.getFontMetrics().getStringBounds(msg,myGraphics).getWidth();</span>
+<span class="fc" id="L424">        int x = screen.screenWidth/2 - len/2;</span>
+<span class="fc" id="L425">        return x;</span>
+    }
+
+    /**
+     * Draws the game title screen with a predesigned image, and implements menu option switching.
+     * &lt;p&gt;
+     * This method loads the title screen image from the &quot;/maps/&quot; directory. 
+     * It then draws the background image and menu options, including highlighting the selected option
+     * with a &quot;&gt;&quot; indicator.
+     * &lt;p&gt;
+     * In case of an IOException during image loading, the exception details are printed
+     * to the standard error stream.
+     * &lt;p&gt;
+     * 
+     * @author Nicole Malku
+    */
+    public void drawTitleScreen(){
+<span class="fc" id="L442">        onTime= 0;</span>
+        int x,y;
+        //String msg;
+<span class="fc" id="L445">        myGraphics.setFont(myGraphics.getFont().deriveFont(Font.BOLD,25F));</span>
+        try {
+<span class="fc" id="L447">            titleImg = ImageIO.read(getClass().getResourceAsStream(&quot;/maps/titlescreen.png&quot;));</span>
+           
+<span class="nc" id="L449">        } catch (IOException e) {</span>
+<span class="nc" id="L450">            e.printStackTrace();</span>
+<span class="fc" id="L451">        }</span>
+<span class="fc" id="L452">        myGraphics.drawImage(titleImg, 0,0, null);</span>
+    
+
+        //msg = &quot;NEW GAME&quot;;
+<span class="fc" id="L456">        x = screen.tileSize*6 -26;</span>
+<span class="fc" id="L457">        y = screen.tileSize*10 +5;</span>
+
+<span class="pc bpc" id="L459" title="1 of 2 branches missed.">        if(commandNum == 0){</span>
+<span class="fc" id="L460">            myGraphics.drawString(&quot;&gt;&quot;, x, y);</span>
+        }
+
+        //msg = &quot;QUIT&quot;;
+<span class="fc" id="L464">        x += screen.tileSize*6;</span>
+        //myGraphics.drawString(msg, x, y);
+<span class="pc bpc" id="L466" title="1 of 2 branches missed.">        if(commandNum == 1){</span>
+<span class="nc" id="L467">            myGraphics.drawString(&quot;&gt;&quot;, x+6, y);</span>
+        }
+       
+<span class="fc" id="L470">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,55 @@
+
+f
+java:S1104
+"PMake name a static final constant or non-public and provide accessors if needed.( şÍ¾
+m
+java:S1104"RMake worldX a static final constant or non-public and provide accessors if needed.(ª‡ãìıÿÿÿÿ
+m
+java:S1104"RMake worldY a static final constant or non-public and provide accessors if needed.(ª‡ãìıÿÿÿÿ
+l
+java:S1104"QMake speed a static final constant or non-public and provide accessors if needed.(¥ğ‡ğøÿÿÿÿ
+d
+java:S1104"NMake f1 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake f2 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake b1 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake b2 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake l1 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake l2 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake r1 a static final constant or non-public and provide accessors if needed.(Çß™°
+d
+java:S1104"NMake r2 a static final constant or non-public and provide accessors if needed.(Çß™°
+g
+java:S1104"QMake cover a static final constant or non-public and provide accessors if needed.(Çß™°
+k
+java:S1104"PMake side a static final constant or non-public and provide accessors if needed.(ùªèıÿÿÿÿ
+s
+java:S1104"XMake sideSwitcher a static final constant or non-public and provide accessors if needed.(ãßŞ”úÿÿÿÿ
+n
+java:S1104"SMake sideNum a static final constant or non-public and provide accessors if needed.(´ÄÉğüÿÿÿÿ
+k
+java:S1104"UMake solidArea a static final constant or non-public and provide accessors if needed.(µºö‰
+s
+java:S1104"]Make solidAreaDefaultX a static final constant or non-public and provide accessors if needed.(š¶Ö±
+s
+java:S1104"]Make solidAreaDefaultY a static final constant or non-public and provide accessors if needed.(š¶Ö±
+r
+java:S1104"WMake collisionOn a static final constant or non-public and provide accessors if needed.(óê½ıÿÿÿÿ
+n
+java:S1104"SMake maxLife a static final constant or non-public and provide accessors if needed.(úôÛ©øÿÿÿÿ
+k
+java:S1104"PMake life a static final constant or non-public and provide accessors if needed.(úôÛ©øÿÿÿÿ
+?
+java:S1659"$Declare "worldY" on a separate line.(ª‡ãìıÿÿÿÿ
+U
+java:S1659"?Declare "f2" and all following declarations on a separate line.(Çß™°
+E
+java:S1659"/Declare "solidAreaDefaultY" on a separate line.(š¶Ö±
+=
+java:S1659""Declare "life" on a separate line.(úôÛ©øÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(ñôÛªúÿÿÿÿ

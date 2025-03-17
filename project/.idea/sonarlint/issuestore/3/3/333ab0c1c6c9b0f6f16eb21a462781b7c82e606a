@@ -1,0 +1,53 @@
+
+|
+java:S1488¨"YImmediately return this expression instead of assigning it to the temporary variable "x".(Ê€Êòüÿÿÿÿ8À·¿øÂ1
+u
+java:S1104"XMake regRewardImg a static final constant or non-public and provide accessors if needed.(™Â‚8À·¿øÂ1
+m
+java:S1104"PMake full a static final constant or non-public and provide accessors if needed.(™Â‚8À·¿øÂ1
+m
+java:S1104"PMake half a static final constant or non-public and provide accessors if needed.(™Â‚8Á·¿øÂ1
+n
+java:S1104"QMake empty a static final constant or non-public and provide accessors if needed.(™Â‚8Á·¿øÂ1
+q
+java:S1104"TMake titleImg a static final constant or non-public and provide accessors if needed.(™Â‚8Á·¿øÂ1
+p
+java:S1104"TMake textFlag a static final constant or non-public and provide accessors if needed.(Î¤8Á·¿øÂ1
+m
+java:S1104"PMake text a static final constant or non-public and provide accessors if needed.(ÙØÌ’8Á·¿øÂ1
+p
+java:S1104"SMake endGame a static final constant or non-public and provide accessors if needed.(Ó©ä¥8Á·¿øÂ1
+s
+java:S1104"VMake commandNum a static final constant or non-public and provide accessors if needed.(Æ¨Ä’8Á·¿øÂ1
+^
+java:S1659"ADeclare "full" and all following declarations on a separate line.(™Â‚8‚¸¿øÂ1
+V	java:S125"<This block of commented-out lines of code should be removed.(¾ù8‘¢ÎøÂ1
+]	java:S125t"<This block of commented-out lines of code should be removed.(£‘òúÿÿÿÿ8Š¸¿øÂ1
+B
+java:S1659"Declare "y" on a separate line.(¡Ê²‘şÿÿÿÿ8Œ¸¿øÂ1
+V
+java:S1117Ë"8Rename "text" which hides the field declared at line 21.(ÁŸãª8¸¿øÂ1
+^	java:S125õ"<This block of commented-out lines of code should be removed.(¨Øı”úÿÿÿÿ8öøâøÂ1
+?	java:S131""Add a default case to this switch.(¾“ÆÇ8“¸¿øÂ1
+p	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìéœ¬úÿÿÿÿ8“¸¿øÂ1
+Y	java:S125¦"<This block of commented-out lines of code should be removed.(ÅŞµˆ8•¸¿øÂ1
+E
+java:S1125°"'Remove the unnecessary boolean literal.(ê£Œü8–¸¿øÂ1
+E
+java:S1125º"'Remove the unnecessary boolean literal.(ê£Œü8–¸¿øÂ1
+E
+java:S1125È"'Remove the unnecessary boolean literal.(ê£Œü8—¸¿øÂ1
+k	java:S100Ú"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ìûå8˜¸¿øÂ1
+E
+java:S1125ï"'Remove the unnecessary boolean literal.(ê£Œü8š¸¿øÂ1
+p	java:S100ø"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ‰‰úùÿÿÿÿ8š¸¿øÂ1
+E
+java:S1125„"'Remove the unnecessary boolean literal.(ê£Œü8›¸¿øÂ1
+E
+java:S1125•"'Remove the unnecessary boolean literal.(ê£Œü8œ¸¿øÂ1
+B
+java:S1659»"Declare "y" on a separate line.(¡Ê²‘şÿÿÿÿ8¸¿øÂ1
+Y	java:S125¼"<This block of commented-out lines of code should be removed.(¾Îå8¸¿øÂ1
+^	java:S125Ç"<This block of commented-out lines of code should be removed.(Ã¨ãúÿÿÿÿ8Ÿ¸¿øÂ1
+Y	java:S125Ï"<This block of commented-out lines of code should be removed.(Üú•ı8Ÿ¸¿øÂ1
+Y	java:S125Ñ"<This block of commented-out lines of code should be removed.(ê±‘8Ÿ¸¿øÂ1

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>collisionChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">collisionChecker.java</span></div><h1>collisionChecker.java</h1><pre class="source lang-java linenums">package org.game;
+
+import org.entity.Entity;
+
+/**
+ * The {@code collisionChecker} class is responsible for checking collisions between entities
+ * and the game environment or other game entities on the {@code GameScreen}.
+ * It provides methods to check collisions with tiles and other objects, facilitating
+ * collision detection and response in the game.
+ *
+ * @author Usman Aziz
+ * @author Ryan Chong
+ * @author Nicole Malku
+ */
+public class collisionChecker {
+    GameScreen screen;
+    private static final int noCollision = 999;
+    private static final int minute = 60;
+<span class="fc" id="L19">    public collisionChecker(GameScreen screen){ this.screen = screen;}</span>
+
+    /**
+     * Checks for tile collisions based on the provided entity's position and movement direction.
+     *
+     * @author Usman Aziz
+     * @author Ryan Chong
+     * @author Nicole Malku
+     *
+     * @param entity The entity for which to check tile collisions.
+     */
+    public void checkTile(Entity entity){
+<span class="fc" id="L31">        int entityLeftWorldX = entity.worldX + entity.solidArea.x;</span>
+<span class="fc" id="L32">        int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;</span>
+<span class="fc" id="L33">        int entityTopWorldY = entity.worldY + entity.solidArea.y;</span>
+<span class="fc" id="L34">        int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;</span>
+
+<span class="fc" id="L36">        int entityLeftCol = entityLeftWorldX/ screen.tileSize;</span>
+<span class="fc" id="L37">        int entityRightCol = entityRightWorldX/screen.tileSize;</span>
+<span class="fc" id="L38">        int entityTopRow = entityTopWorldY/screen.tileSize;</span>
+<span class="fc" id="L39">        int entityBottomRow = entityBottomWorldY/screen.tileSize;</span>
+
+        int tileNum1;
+        int tileNum2;
+
+<span class="pc bpc" id="L44" title="1 of 5 branches missed.">        switch (entity.side) {</span>
+            case &quot;up&quot;:
+<span class="fc" id="L46">                entityTopRow = (entityTopWorldY - entity.speed) / screen.tileSize;</span>
+<span class="fc" id="L47">                tileNum1 = screen.mapM.mapNum[entityLeftCol][entityTopRow];</span>
+<span class="fc" id="L48">                tileNum2 = screen.mapM.mapNum[entityRightCol][entityTopRow];</span>
+<span class="fc" id="L49">                break;</span>
+            case &quot;down&quot;:
+<span class="fc" id="L51">                entityBottomRow = (entityBottomWorldY + entity.speed) / screen.tileSize;</span>
+<span class="fc" id="L52">                tileNum1 = screen.mapM.mapNum[entityLeftCol][entityBottomRow];</span>
+<span class="fc" id="L53">                tileNum2 = screen.mapM.mapNum[entityRightCol][entityBottomRow];</span>
+<span class="fc" id="L54">                break;</span>
+            case &quot;left&quot;:
+<span class="fc" id="L56">                entityLeftCol = (entityLeftWorldX - entity.speed) / screen.tileSize;</span>
+<span class="fc" id="L57">                tileNum1 = screen.mapM.mapNum[entityLeftCol][entityTopRow];</span>
+<span class="fc" id="L58">                tileNum2 = screen.mapM.mapNum[entityLeftCol][entityBottomRow];</span>
+<span class="fc" id="L59">                break;</span>
+            case &quot;right&quot;:
+<span class="fc" id="L61">                entityRightCol = (entityRightWorldX + entity.speed) / screen.tileSize;</span>
+<span class="fc" id="L62">                tileNum1 = screen.mapM.mapNum[entityRightCol][entityTopRow];</span>
+<span class="fc" id="L63">                tileNum2 = screen.mapM.mapNum[entityRightCol][entityBottomRow];</span>
+<span class="fc" id="L64">                break;</span>
+            default:
+<span class="nc" id="L66">                return;</span>
+        }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            if(screen.mapM.map[tileNum1].collision ||</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">                    screen.mapM.map[tileNum2].collision) {   entity.collisionOn = true;   }</span>
+        
+<span class="fc" id="L71">    }</span>
+    /**
+     * Checks for collisions with other entities, either player or non-player, based on the provided
+     * entity's position, movement direction, and type.
+     *
+     * @author Ryan Chong
+     * @author Usman Aziz
+     * @author Nicole Malku
+     *
+     * @param entity The entity for which to check collisions with.
+     * @param player Indicates whether the provided entity is a player entity.
+     * @return The index of the collided object in the array of objects, or noCollision if no collision occurred.
+     */
+    public int checkOther(Entity entity, boolean player){
+<span class="fc" id="L85">        int index = noCollision;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (int i=0; i&lt;screen.obj.length; i++){</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (screen.obj[i] != null){</span>
+<span class="nc" id="L88">                entity.solidArea.x = entity.worldX + entity.solidArea.x;</span>
+<span class="nc" id="L89">                entity.solidArea.y = entity.worldY + entity.solidArea.y;</span>
+<span class="nc" id="L90">                screen.obj[i].solidArea.x = screen.obj[i].worldX + screen.obj[i].solidArea.x;</span>
+<span class="nc" id="L91">                screen.obj[i].solidArea.y = screen.obj[i].worldY + screen.obj[i].solidArea.y;</span>
+<span class="nc bnc" id="L92" title="All 5 branches missed.">                switch (entity.side){</span>
+                case &quot;up&quot;:
+<span class="nc" id="L94">                    entity.solidArea.y -= entity.speed;</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if(entity.solidArea.intersects(screen.obj[i].solidArea)){</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                        if(screen.obj[i].collision){</span>
+<span class="nc" id="L97">                            entity.collisionOn = true;</span>
+                        }
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                        if(player){ index = i; }</span>
+                    }
+<span class="nc" id="L101">                    break;</span>
+                case &quot;down&quot;:
+<span class="nc" id="L103">                    entity.solidArea.y += entity.speed;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                    if(entity.solidArea.intersects(screen.obj[i].solidArea)){</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                        if(screen.obj[i].collision){</span>
+<span class="nc" id="L106">                            entity.collisionOn = true;</span>
+                        }
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                        if(player){ index = i;  }</span>
+                    }
+<span class="nc" id="L110">                    break;</span>
+                case &quot;left&quot;:
+<span class="nc" id="L112">                    entity.solidArea.x -= entity.speed;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                    if(entity.solidArea.intersects(screen.obj[i].solidArea)){</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                        if(screen.obj[i].collision){</span>
+<span class="nc" id="L115">                            entity.collisionOn = true;</span>
+                        }
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                        if(player){</span>
+<span class="nc" id="L118">                            index = i;</span>
+                        }
+                    }
+<span class="nc" id="L121">                    break;</span>
+                case &quot;right&quot;:
+<span class="nc" id="L123">                    entity.solidArea.x += entity.speed;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                    if(entity.solidArea.intersects(screen.obj[i].solidArea)){</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                        if(screen.obj[i].collision){</span>
+<span class="nc" id="L126">                            entity.collisionOn = true;</span>
+                        }
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                        if(player){</span>
+<span class="nc" id="L129">                            index = i;</span>
+                        }
+                    }
+<span class="nc" id="L132">                    break;</span>
+                    default:
+<span class="nc" id="L134">                        throw new IllegalStateException(&quot;Unexpected value: &quot; + entity.side);</span>
+                }
+<span class="nc" id="L136">                entity.solidArea.x = entity.solidAreaDefaultX;</span>
+<span class="nc" id="L137">                entity.solidArea.y = entity.solidAreaDefaultY;</span>
+<span class="nc" id="L138">                screen.obj[i].solidArea.x = screen.obj[i].solidAreaDefaultX;</span>
+<span class="nc" id="L139">                screen.obj[i].solidArea.y= screen.obj[i].solidAreaDefaultY;</span>
+            }
+        }
+
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (int i=0; i&lt;screen.alien.length; i++){</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            if (screen.alien[i] != null){</span>
+<span class="fc" id="L145">                entity.solidArea.x = entity.worldX + entity.solidArea.x;</span>
+<span class="fc" id="L146">                entity.solidArea.y = entity.worldY + entity.solidArea.y;</span>
+<span class="fc" id="L147">                screen.alien[i].solidArea.x = screen.alien[i].worldX + screen.alien[i].solidArea.x;</span>
+<span class="fc" id="L148">                screen.alien[i].solidArea.y = screen.alien[i].worldY + screen.alien[i].solidArea.y;</span>
+<span class="pc bpc" id="L149" title="1 of 5 branches missed.">                switch (entity.side){</span>
+                case &quot;up&quot;:
+<span class="fc" id="L151">                    entity.solidArea.y -= entity.speed;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">                    if(entity.solidArea.intersects(screen.alien[i].solidArea) &amp;&amp;</span>
+<span class="pc bpc" id="L153" title="3 of 6 branches missed.">                            (player &amp;&amp; screen.alien[i].attackTimer==0 &amp;&amp; (screen.player.life &gt; 0))) {</span>
+<span class="fc" id="L154">                        screen.player.life--;</span>
+<span class="fc" id="L155">                        screen.startSFX(3);</span>
+<span class="fc" id="L156">                        screen.alien[i].attackTimer=minute;</span>
+                    }
+<span class="fc" id="L158">                    break;</span>
+                case &quot;down&quot;:
+<span class="fc" id="L160">                    entity.solidArea.y += entity.speed;</span>
+<span class="pc bpc" id="L161" title="2 of 4 branches missed.">                    if(entity.solidArea.intersects(screen.alien[i].solidArea) &amp;&amp; (player &amp;&amp;</span>
+<span class="pc bpc" id="L162" title="2 of 4 branches missed.">                            screen.alien[i].attackTimer==0 &amp;&amp; (screen.player.life &gt; 0))) {</span>
+<span class="fc" id="L163">                        screen.player.life--;</span>
+<span class="fc" id="L164">                        screen.startSFX(3);</span>
+<span class="fc" id="L165">                        screen.alien[i].attackTimer=minute;</span>
+                    }
+<span class="fc" id="L167">                    break;</span>
+                case &quot;left&quot;:
+<span class="fc" id="L169">                    entity.solidArea.x -= entity.speed;</span>
+<span class="pc bpc" id="L170" title="2 of 4 branches missed.">                    if(entity.solidArea.intersects(screen.alien[i].solidArea) &amp;&amp; (player &amp;&amp;</span>
+<span class="pc bpc" id="L171" title="2 of 4 branches missed.">                            screen.alien[i].attackTimer==0) &amp;&amp; (screen.player.life &gt; 0)) {</span>
+<span class="fc" id="L172">                        screen.player.life--;</span>
+<span class="fc" id="L173">                        screen.startSFX(3);</span>
+<span class="fc" id="L174">                        screen.alien[i].attackTimer=minute;</span>
+                    }
+<span class="fc" id="L176">                    break;</span>
+                case &quot;right&quot;:
+<span class="fc" id="L178">                    entity.solidArea.x += entity.speed;</span>
+<span class="pc bpc" id="L179" title="2 of 4 branches missed.">                    if(entity.solidArea.intersects(screen.alien[i].solidArea) &amp;&amp; ((player &amp;&amp;</span>
+<span class="pc bpc" id="L180" title="2 of 4 branches missed.">                            screen.alien[i].attackTimer==0) &amp;&amp; screen.player.life &gt; 0)){</span>
+<span class="fc" id="L181">                        screen.player.life--;</span>
+<span class="fc" id="L182">                        screen.startSFX(3);</span>
+<span class="fc" id="L183">                        screen.alien[i].attackTimer=minute;</span>
+                    }
+<span class="fc" id="L185">                    break;</span>
+
+                    default:
+<span class="nc" id="L188">                        throw new IllegalStateException(&quot;Unexpected value: &quot; + entity.side);</span>
+                }
+<span class="fc" id="L190">                entity.solidArea.x = entity.solidAreaDefaultX;</span>
+<span class="fc" id="L191">                entity.solidArea.y = entity.solidAreaDefaultY;</span>
+<span class="fc" id="L192">                screen.alien[i].solidArea.x = screen.alien[i].solidAreaDefaultX;</span>
+<span class="fc" id="L193">                screen.alien[i].solidArea.y= screen.alien[i].solidAreaDefaultY;</span>
+            }
+        }
+<span class="fc" id="L196">        return index;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

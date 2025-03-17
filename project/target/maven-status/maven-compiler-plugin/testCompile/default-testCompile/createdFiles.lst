@@ -1,0 +1,10 @@
+org\alien\AlienTest.class
+org\entity\PlayerTest.class
+org\ai\PathfinderTest.class
+org\ai\NodeTest.class
+org\game\AssetSetterTest.class
+org\game\KeyboardInputTest.class
+org\game\UITest.class
+org\maps\MapManagerTest.class
+org\game\GameScreenTest.class
+org\game\PortalTest.class

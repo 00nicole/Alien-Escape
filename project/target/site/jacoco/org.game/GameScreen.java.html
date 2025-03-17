@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">GameScreen.java</span></div><h1>GameScreen.java</h1><pre class="source lang-java linenums">package org.game;
+
+import org.ai.Pathfinder;
+import org.alien.*;
+
+import javax.swing.JPanel;
+
+import org.entity.Player;
+import org.maps.MapManager;
+import org.object.SuperObject;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+/**
+ * Represents the main game screen, managing game state, player input, objects, and rendering.
+ * &lt;p&gt;
+ * The {@code GameScreen} class extends JPanel and implements the Runnable interface, serving as the
+ * primary container for the game. It handles game state transitions, player input, updates, and
+ * rendering of game elements.
+ * &lt;p&gt;
+ * The class defines constants for screen dimensions, world dimensions, and game states. It includes
+ * a game loop in the {@code run} method, which periodically updates and repaints the screen.
+ * &lt;p&gt;
+ * The class manages various game elements, including the player, aliens, objects, maps, and user interface.
+ * 
+ * @author Nicole Malku
+ * @author Usman Aziz
+ * @author Ryan Chong
+ * @author Curtis Pu
+ * @version 1.0
+ */
+public class GameScreen extends JPanel implements Runnable{
+    
+    //SETTINGS
+<span class="fc" id="L38">    final int orgTileSize = 22; //22*22 pixel</span>
+
+<span class="fc" id="L40">    final int scale = 2;</span>
+
+<span class="fc" id="L42">    public final int tileSize = orgTileSize * scale; //44*44 pixel tiles</span>
+<span class="fc" id="L43">    public final int maxScreenCol = 21;</span>
+<span class="fc" id="L44">    public final int maxScreenRow = 12;</span>
+<span class="fc" id="L45">    public final int screenWidth = tileSize* maxScreenCol; // 924 pixels</span>
+<span class="fc" id="L46">    public final int screenHeight = tileSize *maxScreenRow; //528 pixels</span>
+
+    //WORLD SETTINGS
+<span class="fc" id="L49">    public final int maxWorldCol = 50;</span>
+<span class="fc" id="L50">    public final int maxWorldRow = 50;</span>
+<span class="fc" id="L51">    public final int maxMap = 6;</span>
+<span class="fc" id="L52">    public int currentMap = 0;</span>
+    public String currentMapIMGpath;
+<span class="fc" id="L54">    public final int worldWidth = tileSize * maxWorldCol;</span>
+<span class="fc" id="L55">    public final int worldHeight = tileSize * maxWorldCol;</span>
+
+
+    // initializing objects and threads
+<span class="fc" id="L59">    KeyboardInput keyInput = new KeyboardInput(this);</span>
+<span class="fc" id="L60">    Sound music = new Sound();</span>
+<span class="fc" id="L61">    Sound sfx = new Sound();</span>
+<span class="fc" id="L62">    public collisionChecker cChecker = new collisionChecker(this);</span>
+<span class="fc" id="L63">    public AssetSetter aSetter = new AssetSetter(this);</span>
+<span class="fc" id="L64">    public PortalHandler portalHandler = new PortalHandler(this);</span>
+<span class="fc" id="L65">    public Pathfinder pFinder = new Pathfinder(this);</span>
+    Thread gameThread;
+<span class="fc" id="L67">    public Player player = new Player(this, keyInput);</span>
+<span class="fc" id="L68">    public MapManager mapM = new MapManager(this);</span>
+<span class="fc" id="L69">    public SuperObject obj[] = new SuperObject[20];</span>
+<span class="fc" id="L70">    public Alien alien[] = new Alien[20];</span>
+<span class="fc" id="L71">    public Portal portal[] = new Portal[20];</span>
+    
+    //initializing variables
+<span class="fc" id="L74">    int fps = 60;</span>
+    public int gameState;
+<span class="fc" id="L76">    public final int titleState = 0;</span>
+<span class="fc" id="L77">    public final int playState1 = 1;</span>
+<span class="fc" id="L78">    public final int playState2 = 2;</span>
+<span class="fc" id="L79">    public final int playState3 = 3;</span>
+<span class="fc" id="L80">    public final int playState4 = 4;</span>
+<span class="fc" id="L81">    public final int playState5 = 5;</span>
+<span class="fc" id="L82">    public final int playState6 = 6;</span>
+<span class="fc" id="L83">    public final int pauseState = 7;</span>
+<span class="fc" id="L84">    public final int winState = 8;</span>
+<span class="fc" id="L85">    public final int lossState = 9;</span>
+    public int latestPlayState;
+<span class="fc" id="L87">    public UI ui = new UI(this);</span>
+    
+
+
+    /**
+     * Creates a new instance of the {@code GameScreen} class.
+     * &lt;p&gt;
+     * Initializes the panel with the specified dimensions, background color, and sets it as focusable
+     * to receive keyboard input.
+     * 
+     * @author Nicole Malku
+     */
+<span class="fc" id="L99">    public GameScreen(){</span>
+<span class="fc" id="L100">        this.setPreferredSize(new Dimension(screenWidth, screenHeight));</span>
+<span class="fc" id="L101">        this.setBackground(Color.PINK);</span>
+<span class="fc" id="L102">        this.setDoubleBuffered(true);</span>
+<span class="fc" id="L103">        this.addKeyListener(keyInput);</span>
+<span class="fc" id="L104">        this.setFocusable(true);</span>
+<span class="fc" id="L105">    }</span>
+
+    public void setupGame() {
+<span class="fc" id="L108">        aSetter.setObjectMap(1);</span>
+<span class="fc" id="L109">        startMusic(4);</span>
+        //gameState = playState;
+<span class="fc" id="L111">        gameState = titleState;</span>
+<span class="fc" id="L112">    }</span>
+
+    public void restart(){
+<span class="fc" id="L115">        stopMusic();</span>
+<span class="fc" id="L116">        startSFX(6);</span>
+        try {
+<span class="fc" id="L118">            Thread.sleep(700);              </span>
+<span class="nc" id="L119">        } catch(InterruptedException ex) {</span>
+<span class="nc" id="L120">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L121">        }</span>
+<span class="fc" id="L122">        startMusic(4);</span>
+<span class="fc" id="L123">        player.setDefaultPositions();</span>
+<span class="fc" id="L124">        player.restoreLife();</span>
+<span class="fc" id="L125">    }</span>
+
+
+    public void startGameThread(){
+<span class="fc" id="L129">        gameThread = new Thread(this);</span>
+<span class="fc" id="L130">        gameThread.start();</span>
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * The game loop responsible for updating and rendering the game.
+     * &lt;p&gt;
+     * This method calculates the time intervals for updates and repaints to achieve a specified
+     * frames-per-second (fps) rate. It continuously updates game elements and repaints the screen
+     * until the game thread is interrupted.
+     * 
+     * @author Nicole Malku
+     */
+    @Override
+    public void run() { // create game loop
+<span class="fc" id="L144">        double drawInterval = 1000000000/fps;</span>
+<span class="fc" id="L145">        double nextDrawTime = System.nanoTime() + drawInterval;</span>
+
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        while(gameThread != null){</span>
+<span class="fc" id="L148">            update(); // 1. update info like character position</span>
+<span class="fc" id="L149">            repaint(); // 2. draw the screen with the updated info</span>
+            try{
+<span class="fc" id="L151">                double remainingTime = nextDrawTime- System.nanoTime();</span>
+<span class="fc" id="L152">                remainingTime = remainingTime/1000000;</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">                if(remainingTime&lt;0){</span>
+<span class="nc" id="L154">                    remainingTime =0;</span>
+                }
+
+<span class="fc" id="L157">                Thread.sleep((long)remainingTime);</span>
+<span class="fc" id="L158">                nextDrawTime += drawInterval;</span>
+<span class="nc" id="L159">            } catch (InterruptedException e){</span>
+<span class="nc" id="L160">                e.printStackTrace();;</span>
+<span class="pc" id="L161">            }</span>
+        }
+
+<span class="nc" id="L164">    }</span>
+
+    public void update(){
+<span class="pc bpc" id="L167" title="3 of 4 branches missed.">        if(this.playState1&lt;=this.gameState &amp;&amp; this.gameState &lt;= this.playState6) {</span>
+<span class="nc" id="L168">            player.update();</span>
+<span class="nc" id="L169">            aSetter.update(gameState);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        for(int i = 0; i &lt; alien.length; i++){</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if(alien[i] != null){</span>
+                //System.out.println(i);
+<span class="nc" id="L173">                alien[i].update();</span>
+            }
+        }
+        
+        }
+<span class="fc" id="L178">    }</span>
+
+    public void paintComponent(Graphics myGraphics){
+<span class="nc" id="L181">        super.paintComponent(myGraphics);</span>
+<span class="nc" id="L182">        Graphics2D myGraphics2 = (Graphics2D)myGraphics;</span>
+
+        //title screen
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if(gameState == titleState){</span>
+<span class="nc" id="L186">            ui.draw(myGraphics2);</span>
+        }
+        else{
+
+<span class="nc" id="L190">            mapM.draw(myGraphics2,currentMapIMGpath);</span>
+            
+            //object
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            for(int i = 0; i &lt; obj.length; i++){</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">                if(obj[i] != null){</span>
+                    //System.out.println(i);
+<span class="nc" id="L196">                    obj[i].draw(myGraphics2, this);</span>
+                }
+            }
+        }
+        //aliens
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        for(int i = 0; i &lt; alien.length; i++){</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            if(alien[i] != null){</span>
+                //System.out.println(i);
+<span class="nc" id="L204">                alien[i].draw(myGraphics2, this);</span>
+            }
+            }
+
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        for(int i = 0; i &lt; portal.length; i++){</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">            if(portal[i] != null){</span>
+                //System.out.println(i);
+<span class="nc" id="L211">                portal[i].draw(myGraphics2, this);</span>
+            }
+        }
+
+<span class="nc" id="L215">        player.draw(myGraphics2);</span>
+<span class="nc" id="L216">        ui.draw(myGraphics2);</span>
+<span class="nc" id="L217">        myGraphics2.dispose();</span>
+<span class="nc" id="L218">    }</span>
+
+    // SOUND
+    public void startMusic(int i){
+<span class="fc" id="L222">        music.setFile(i);</span>
+<span class="fc" id="L223">        music.start();</span>
+<span class="fc" id="L224">        music.loop();</span>
+<span class="fc" id="L225">    }</span>
+    public void stopMusic(){
+<span class="fc" id="L227">        music.stop();</span>
+<span class="fc" id="L228">    }</span>
+    public void startSFX(int i){
+<span class="fc" id="L230">        sfx.setFile(i);</span>
+<span class="fc" id="L231">        sfx.start();</span>
+<span class="fc" id="L232">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

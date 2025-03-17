@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.maps</a> &gt; <span class="el_source">MapManager.java</span></div><h1>MapManager.java</h1><pre class="source lang-java linenums">package org.maps;
+import java.awt.Graphics2D;
+import java.io.*;
+
+import javax.imageio.ImageIO;
+
+import org.game.GameScreen;
+
+/**
+ * The MapManager class is responsible for managing maps in a game environment. 
+ * &lt;p&gt;
+ * It extends the base Map class and is associated with a specific GameScreen instance.
+ * The class provides methods for loading map images, reading map data from files,
+ * and drawing the map on a myGraphics2D context.
+ *
+ * @author Usman Aziz
+ * @author Nicole Malku
+ */
+public class MapManager extends Map{
+    GameScreen screen;
+    public Map [] map;
+    public int[][] mapNum;
+<span class="fc" id="L23">    public String[]maptxt = new String[10];</span>
+<span class="fc" id="L24">    public String[]mapIMG = new String[10];</span>
+    
+    /**
+     * Constructs a MapManager object associated with a specific GameScreen instance.
+     * &lt;p&gt;
+     * This constructor initializes the MapManager with the provided GameScreen and sets up the required data structures.
+     * It creates an array of Map objects, a two-dimensional array to store map numbers, and loads map images.
+     * Additionally, it loads a specific map based on the provided mapToLoad parameter.
+     *
+     *
+     * @author Usman Aziz
+     * @author Nicole Malku
+     * @param screen The GameScreen instance to associate with this MapManager.
+     */
+<span class="fc" id="L38">    public MapManager(GameScreen screen){</span>
+<span class="fc" id="L39">        this.screen = screen;</span>
+<span class="fc" id="L40">        map = new Map[10];</span>
+<span class="fc" id="L41">        mapNum = new int[screen.maxWorldCol][screen.maxWorldRow];</span>
+<span class="fc" id="L42">        getMapImg();</span>
+<span class="fc" id="L43">        maptxt[1] = &quot;/maps/map1.txt&quot;;</span>
+<span class="fc" id="L44">        maptxt[2] = &quot;/maps/map2.txt&quot;;</span>
+<span class="fc" id="L45">        maptxt[3] = &quot;/maps/map3.txt&quot;;</span>
+<span class="fc" id="L46">        maptxt[4] = &quot;/maps/map4.txt&quot;;</span>
+<span class="fc" id="L47">        maptxt[5] = &quot;/maps/map5.txt&quot;;</span>
+<span class="fc" id="L48">        maptxt[6] = &quot;/maps/map6.txt&quot;;</span>
+<span class="fc" id="L49">        mapIMG[1] = &quot;/maps/map1.png&quot;;</span>
+<span class="fc" id="L50">        mapIMG[2] = &quot;/maps/map2.png&quot;;</span>
+<span class="fc" id="L51">        mapIMG[3] = &quot;/maps/map3.png&quot;;</span>
+<span class="fc" id="L52">        mapIMG[4] = &quot;/maps/map4.png&quot;;</span>
+<span class="fc" id="L53">        mapIMG[5] = &quot;/maps/map5.png&quot;;</span>
+<span class="fc" id="L54">        mapIMG[6] = &quot;/maps/map6.png&quot;;</span>
+<span class="fc" id="L55">        loadMap(maptxt[1]);</span>
+<span class="fc" id="L56">        screen.currentMapIMGpath = mapIMG[1];</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Retrieves and initializes map images for a specific game scenario.
+     * &lt;p&gt;
+     * This method populates an array of Map objects, each containing an image and collision information.
+     * The images are loaded using the ImageIO class from the specified resource paths.
+     * In case of an IOException during image loading, a stack trace is printed.
+     *
+     * @author Usman Aziz
+     * @author Nicole Malku
+     */
+    public void getMapImg(){
+        try {
+<span class="fc" id="L71">            map[0] = new Map();</span>
+<span class="fc" id="L72">            map[0].img = ImageIO.read(getClass().getResourceAsStream(&quot;/maps/walk.png&quot;));</span>
+<span class="fc" id="L73">            map[0].collision=true;</span>
+
+<span class="fc" id="L75">            map[1] = new Map();</span>
+<span class="fc" id="L76">            map[1].img = ImageIO.read(getClass().getResourceAsStream(&quot;/maps/barrier.png&quot;));</span>
+<span class="fc" id="L77">            map[1].collision = false;</span>
+
+<span class="pc" id="L79">        } catch (IOException e) {</span>
+<span class="nc" id="L80">            e.printStackTrace();</span>
+        }
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Loads a map from a specified file and populates the mapNum array.
+     *
+     * @author Usman Aziz
+     * @param S The name of the file to be loaded.
+     * @throws IOException If an I/O error occurs while reading the file.
+     */
+    public void loadMap(String S){
+        try{
+<span class="fc" id="L93">            InputStream is = getClass().getResourceAsStream(S);</span>
+<span class="fc" id="L94">            BufferedReader br = new BufferedReader(new InputStreamReader(is));</span>
+<span class="fc" id="L95">            int col = 0;</span>
+<span class="fc" id="L96">            int row = 0;</span>
+<span class="pc bpc" id="L97" title="1 of 4 branches missed.">            while (col &lt; screen.maxScreenCol &amp;&amp; row &lt; screen.maxScreenRow){</span>
+<span class="fc" id="L98">                String line = br.readLine();</span>
+
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                while(col&lt;screen.maxScreenCol){</span>
+<span class="fc" id="L101">                    String numArray[] = line.split(&quot; &quot;);</span>
+
+<span class="fc" id="L103">                    int num = Integer.parseInt((numArray[col]));</span>
+<span class="fc" id="L104">                    mapNum[col][row] = num;</span>
+<span class="fc" id="L105">                    col++;</span>
+                }
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                if(col == screen.maxScreenCol){</span>
+<span class="fc" id="L108">                    col = 0;</span>
+<span class="fc" id="L109">                    row++;</span>
+                }
+            }
+<span class="fc" id="L112">            br.close();</span>
+<span class="pc" id="L113">        }catch(Exception ignored){}</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Draws the map on the specified myGraphics2D context.
+     * &lt;p&gt;
+     * This method loads a map image from the &quot;/maps/&quot; directory and draws it onto
+     * the provided myGraphics2D context at the coordinates (0, 0).
+     * &lt;p&gt;
+     * In case of an IOException during image loading, the exception details are printed to
+     * the standard error stream.
+     * 
+     * @author Nicole Malku
+     * @param myGraphics The myGraphics2D context on which to draw the map.
+     */
+    public void draw(Graphics2D myGraphics, String mapIMGpath){
+        try {
+<span class="nc" id="L130">            mapy = ImageIO.read(getClass().getResourceAsStream(screen.currentMapIMGpath));</span>
+
+<span class="nc" id="L132">        } catch (IOException e) {</span>
+<span class="nc" id="L133">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L135">        myGraphics.drawImage(mapy, 0,0 , null);</span>
+<span class="nc" id="L136">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

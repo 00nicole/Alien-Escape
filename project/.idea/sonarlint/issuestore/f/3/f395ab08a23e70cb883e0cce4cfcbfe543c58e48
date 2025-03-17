@@ -1,0 +1,15 @@
+
+r	java:S117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Éõ—ÿÿÿÿÿ8œŠšúÂ1
+q
+java:S1104"OMake map a static final constant or non-public and provide accessors if needed.(¯ÈêÑûÿÿÿÿ8œŠšúÂ1
+o
+java:S1104"RMake mapNum a static final constant or non-public and provide accessors if needed.(¹…º8œŠšúÂ1
+t
+java:S1104"RMake maptxt a static final constant or non-public and provide accessors if needed.(¶à­Îüÿÿÿÿ8œŠšúÂ1
+t
+java:S1104"RMake mapIMG a static final constant or non-public and provide accessors if needed.(Ï²Ğ½şÿÿÿÿ8œŠšúÂ1
+L
+java:S1197e"*Move the array designators [] to the type.(·áş£ûÿÿÿÿ8ş„¡úÂ1
+E	java:S108q")Either remove or fill this block of code.(¨šşµ8¯ŠšúÂ1
+N
+java:S1172€"1Remove this unused method parameter "mapIMGpath".(»ù®O8†˜¡úÂ1

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sound.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">Sound.java</span></div><h1>Sound.java</h1><pre class="source lang-java linenums">package org.game;
+
+import java.io.InputStream;
+import java.io.BufferedInputStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
+public class Sound {
+    Clip clip;
+<span class="fc" id="L12">    private String[] soundFilePath = new String[30];</span>
+    FloatControl flt;
+<span class="fc" id="L14">    int volSlider = 3;</span>
+    float vol;
+
+
+    /**
+     * Sound constructor initializes the paths of each sound used in the game.
+     * 
+     * @author Nicole Malku
+     */
+<span class="fc" id="L23">    public Sound(){</span>
+<span class="fc" id="L24">        soundFilePath[0] = &quot;/sound/gamesong.wav&quot;;</span>
+<span class="fc" id="L25">        soundFilePath[1] = &quot;/sound/rewardsound.wav&quot;;</span>
+<span class="fc" id="L26">        soundFilePath[2] = &quot;/sound/winningsong.wav&quot;;</span>
+<span class="fc" id="L27">        soundFilePath[3] = &quot;/sound/hitsound.wav&quot;;</span>
+<span class="fc" id="L28">        soundFilePath[4] = &quot;/sound/intro.wav&quot;;</span>
+<span class="fc" id="L29">        soundFilePath[5] = &quot;/sound/selection.wav&quot;;</span>
+<span class="fc" id="L30">        soundFilePath[6] = &quot;/sound/enter.wav&quot;;</span>
+<span class="fc" id="L31">        soundFilePath[7] = &quot;/sound/exit.wav&quot;;</span>
+<span class="fc" id="L32">        soundFilePath[8] = &quot;/sound/failure.wav&quot;;</span>
+<span class="fc" id="L33">        soundFilePath[9] = &quot;/sound/teleport.wav&quot;;</span>
+<span class="fc" id="L34">        soundFilePath[10] = &quot;/sound/punishment.wav&quot;;</span>
+<span class="fc" id="L35">        soundFilePath[11] = &quot;/sound/endloss.wav&quot;;</span>
+        
+<span class="fc" id="L37">    }</span>
+    
+    /**
+     * Sets the audio file to be used by the sound player at the specified index.
+     * 
+     * @author Nicole Malku
+     * @param i the index of the sound desired from soundFilePath
+     * @throws Exception If an exception occurs during the file loading or playback setup, the details are printed to the standard error stream.
+     */
+    public void setFile(int i) {
+        try
+        {   
+<span class="fc" id="L49">            InputStream is = getClass().getResourceAsStream(soundFilePath[i]);</span>
+<span class="fc" id="L50">            InputStream buffered = new BufferedInputStream(is);</span>
+<span class="fc" id="L51">            AudioInputStream aud = AudioSystem.getAudioInputStream(buffered);</span>
+<span class="fc" id="L52">                clip = AudioSystem.getClip();</span>
+<span class="fc" id="L53">                clip.open(aud);</span>
+<span class="fc" id="L54">                flt =(FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);</span>
+<span class="fc" id="L55">                volume();</span>
+<span class="fc" id="L56">        }</span>
+<span class="nc" id="L57">        catch (Exception e) {</span>
+<span class="nc" id="L58">            e.printStackTrace();</span>
+        }
+<span class="fc" id="L60">    }</span>
+
+    public void start(){
+<span class="fc" id="L63">        clip.start();</span>
+<span class="fc" id="L64">    }</span>
+
+    public void loop(){
+<span class="fc" id="L67">        clip.loop(Clip.LOOP_CONTINUOUSLY);</span>
+<span class="fc" id="L68">    }</span>
+    public void stop(){
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if(clip != null)    clip.stop();</span>
+
+<span class="fc" id="L72">    }</span>
+    public void volume(){
+<span class="pc bpc" id="L74" title="6 of 7 branches missed.">        switch(volSlider){</span>
+<span class="nc" id="L75">        case 0: vol = -80f; break;</span>
+<span class="nc" id="L76">        case 1: vol = -20f; break;</span>
+<span class="nc" id="L77">        case 2: vol = -12f;break;</span>
+<span class="fc" id="L78">        case 3: vol = -6f;break;</span>
+<span class="nc" id="L79">        case 4: vol = 1f; break;</span>
+<span class="nc" id="L80">        case 5: vol = 6f;break;</span>
+        }
+<span class="fc" id="L82">        flt.setValue(vol);</span>
+<span class="fc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

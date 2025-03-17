@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KeyboardInput.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">KeyboardInput.java</span></div><h1>KeyboardInput.java</h1><pre class="source lang-java linenums">package org.game;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+
+/**
+ * Class that manages the user's keyboard input
+ * 
+ * @author Nicole Malku
+ */
+public class KeyboardInput implements KeyListener{
+
+    GameScreen screen;
+    public boolean upKey, downKey, leftKey, rightKey, enterPressed;
+    //rivate boolean musicON = false;
+
+<span class="fc" id="L18">    public KeyboardInput(GameScreen screen) {</span>
+<span class="fc" id="L19">        this.screen = screen;</span>
+<span class="fc" id="L20">    }</span>
+   
+    @Override
+    public void keyTyped(KeyEvent e) {
+<span class="fc" id="L24">    }</span>
+
+    /* 
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        if(screen.gameState == screen.titleState){
+            if(code == KeyEvent.VK_A){
+                screen.ui.commandNum--;
+                if(screen.ui.commandNum &lt; 0){
+                    screen.ui.commandNum = 1;
+                }
+            }
+            if(code == KeyEvent.VK_D){
+                screen.ui.commandNum++;
+                if(screen.ui.commandNum &gt; 1){
+                    screen.ui.commandNum = 0;
+                }
+            }
+            if(code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE){
+                if(screen.ui.commandNum == 0){
+                    screen.stopMusic();
+                    screen.startSFX(6);
+                    try {
+                        Thread.sleep(700);              
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    screen.gameState = screen.playState1;
+                    screen.player.score=0;
+                    screen.latestPlayState = screen.playState1;
+                    screen.player.hasPlanet = 0;
+                    screen.mapM.loadMap(screen.mapM.maptxt[1]);
+                    screen.currentMapIMGpath = screen.mapM.mapIMG[1];
+                    screen.aSetter.clear();
+                    screen.aSetter.setObjectMap(1);
+                    
+                
+                    screen.startMusic(0);
+            
+                }
+            if(screen.ui.commandNum == 1){
+                screen.stopMusic();
+                screen.startSFX(7);
+                try {
+                    Thread.sleep(700);              
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                System.exit(0);
+            }
+            }
+        }
+
+        if(screen.playState1&lt;=screen.gameState &amp;&amp; screen.gameState &lt;= screen.playState6 || screen.gameState == screen.pauseState){
+            if(code == KeyEvent.VK_W){
+                upKey = true;
+            }
+            else if(code == KeyEvent.VK_A){
+                leftKey = true; 
+            }
+            else if(code == KeyEvent.VK_S){
+                downKey = true;
+            }
+            else if(code == KeyEvent.VK_D){
+                rightKey = true;
+            }
+            else if(code == KeyEvent.VK_P || code == KeyEvent.VK_ESCAPE){
+                screen.gameState = screen.pauseState;
+            }
+        if(screen.gameState == screen.pauseState){
+            if(code == KeyEvent.VK_ENTER){
+                enterPressed = true;
+            }
+            screen.startSFX(5);
+            int maxCmmdNum =0;
+            switch(screen.ui.subState){
+            case 0: 
+                maxCmmdNum =4;
+                break;
+            case 2: 
+                maxCmmdNum =1;
+                break;
+
+            }
+            if(code == KeyEvent.VK_W){
+                screen.ui.commandNum--;
+                screen.startSFX(5);
+                if(screen.ui.commandNum &lt;0){
+                    screen.ui.commandNum = maxCmmdNum;
+                }
+            }
+            if(code == KeyEvent.VK_S){
+                screen.ui.commandNum ++;
+                screen.startSFX(5);
+                if(screen.ui.commandNum &gt; maxCmmdNum){
+                    screen.ui.commandNum =0;
+                }
+            }
+            if(code == KeyEvent.VK_DOWN){
+                if(screen.ui.subState ==0){
+                    if(screen.ui.commandNum  == 0 &amp;&amp; screen.music.volSlider&gt;0){
+                        screen.music.volSlider --;
+                        screen.music.volume();
+                        screen.startSFX(5);
+                    }
+                    if(screen.ui.commandNum  == 1 &amp;&amp; screen.sfx.volSlider&gt;0){
+                        screen.sfx.volSlider --;
+                        screen.sfx.volume();
+                        screen.startSFX(5);
+                    }
+                }
+            }
+            if(code == KeyEvent.VK_UP){
+                if(screen.ui.subState ==0){
+                    if(screen.ui.commandNum == 0 &amp;&amp; screen.music.volSlider&lt;5){
+                        screen.music.volSlider ++;
+                        screen.music.volume();
+                        screen.startSFX(5);
+                    }
+                    if(screen.ui.commandNum  == 1 &amp;&amp; screen.sfx.volSlider&lt;5){
+                        screen.sfx.volSlider ++;
+                        screen.sfx.volume();
+                        screen.startSFX(5);
+                    }
+                }
+            }
+        }
+    }
+    if(screen.gameState == screen.lossState){
+        if(code == KeyEvent.VK_W){
+            screen.ui.commandNum--;
+            if(screen.ui.commandNum &lt; 0){
+                screen.ui.commandNum = 1;
+            }
+        }
+        if(code == KeyEvent.VK_S){
+            screen.ui.commandNum++;
+            if(screen.ui.commandNum &gt; 1){
+                screen.ui.commandNum = 0;
+            }
+        }
+        if(code == KeyEvent.VK_ENTER){
+            if(screen.ui.commandNum == 0){
+                //screen.stopMusic();
+                screen.gameState = screen.titleState;
+                
+                screen.restart();
+                
+            }
+            else if(screen.ui.commandNum == 1){
+                screen.stopMusic();
+                screen.startSFX(7);
+                try {
+                    Thread.sleep(700);              
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                System.exit(0);
+        }
+        }
+    }
+    
+    } */
+
+     /**
+     * Main method that calls the appropriate handlers for each game state.
+     * 
+     * @author Nicole Malku
+     * @param e the key hit
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+<span class="fc" id="L197">        int code = e.getKeyCode();</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (screen.gameState == screen.titleState) {</span>
+<span class="fc" id="L199">            handleTitleStateInput(code);</span>
+        } 
+<span class="pc bpc" id="L201" title="1 of 6 branches missed.">        else if (screen.playState1 &lt;= screen.gameState &amp;&amp; screen.gameState &lt;= screen.playState6 || screen.gameState == screen.pauseState) {</span>
+<span class="fc" id="L202">            handleGameInput(code);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (screen.gameState == screen.pauseState) {</span>
+<span class="fc" id="L204">                handlePauseInput(code);</span>
+            }
+        } 
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        else if (screen.gameState == screen.lossState) {</span>
+<span class="fc" id="L208">            handleLossStateInput(code);</span>
+        }
+<span class="fc" id="L210">    }</span>
+
+    /**
+     * Handles keyboard input on the title screen.
+     * &lt;p&gt;
+     * Adjusts the command number based on 'A' and 'D' key presses
+     * by calling {@link #adjustCommandNum(int, int)}.
+     * Calls {@link #handleTitleStateEnter()} to handle 'Enter' or 'Space' key presses.
+     *
+     * @author Nicole Malku
+     * @param code The appropriate key code input
+     * @see #adjustCommandNum(int, int)
+     * @see #handleTitleStateEnter()
+     */
+    private void handleTitleStateInput(int code) {
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (code == KeyEvent.VK_A) {</span>
+<span class="fc" id="L226">            adjustCommandNum(-1, 1);</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        } else if (code == KeyEvent.VK_D) {</span>
+<span class="fc" id="L228">            adjustCommandNum(1, 1);</span>
+<span class="pc bpc" id="L229" title="3 of 4 branches missed.">        } else if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {</span>
+<span class="fc" id="L230">            handleTitleStateEnter();</span>
+        }
+<span class="fc" id="L232">    }</span>
+
+    /**
+     * Handles the action triggered by the 'Enter' or 'Space' key press on the title screen.
+     * &lt;p&gt;
+     * If the current command number is 0, stops the music, plays a sound effect,
+     * and transitions to the play state 1 after a short delay.
+     * If the command number is 1, stops the music, plays a different sound effect,
+     * and exits the game after a short delay.
+     * 
+     * @author Nicole Malku
+     */
+    private void handleTitleStateEnter() {
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (screen.ui.commandNum == 0) {</span>
+<span class="fc" id="L246">            screen.stopMusic();</span>
+<span class="fc" id="L247">            screen.startSFX(6);</span>
+            try {
+<span class="fc" id="L249">                Thread.sleep(700);</span>
+<span class="nc" id="L250">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L251">                Thread.currentThread().interrupt();</span>
+<span class="fc" id="L252">            }</span>
+<span class="fc" id="L253">            screen.gameState = screen.playState1;</span>
+<span class="fc" id="L254">            screen.player.score = 0;</span>
+<span class="fc" id="L255">            screen.latestPlayState = screen.playState1;</span>
+<span class="fc" id="L256">            screen.player.hasPlanet = 0;</span>
+<span class="fc" id="L257">            screen.mapM.loadMap(screen.mapM.maptxt[1]);</span>
+<span class="fc" id="L258">            screen.currentMapIMGpath = screen.mapM.mapIMG[1];</span>
+<span class="fc" id="L259">            screen.aSetter.clear();</span>
+<span class="fc" id="L260">            screen.aSetter.setObjectMap(1);</span>
+<span class="fc" id="L261">            screen.startMusic(0);</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        } else if (screen.ui.commandNum == 1) {</span>
+<span class="nc" id="L263">            screen.stopMusic();</span>
+<span class="nc" id="L264">            screen.startSFX(7);</span>
+            try {
+<span class="nc" id="L266">                Thread.sleep(700);</span>
+<span class="nc" id="L267">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L268">                Thread.currentThread().interrupt();</span>
+<span class="nc" id="L269">            }</span>
+<span class="nc" id="L270">            System.exit(0);</span>
+        }
+<span class="fc" id="L272">    }</span>
+
+    /**
+     * Handles keyboard input during the gameplay state.
+     * &lt;p&gt;
+     * Sets corresponding movement flags based on 'W', 'A', 'S', 'D' key presses,
+     * and triggers the pause state on 'P' or 'Escape' key press.
+     *
+     * @author Nicole Malku
+     * @param code The appropriate key code input
+     */
+    private void handleGameInput(int code) {
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (code == KeyEvent.VK_W) {</span>
+<span class="fc" id="L285">            upKey = true;</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        } else if (code == KeyEvent.VK_A) {</span>
+<span class="fc" id="L287">            leftKey = true;</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        } else if (code == KeyEvent.VK_S) {</span>
+<span class="fc" id="L289">            downKey = true;</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        } else if (code == KeyEvent.VK_D) {</span>
+<span class="fc" id="L291">            rightKey = true;</span>
+<span class="pc bpc" id="L292" title="2 of 4 branches missed.">        } else if (code == KeyEvent.VK_P || code == KeyEvent.VK_ESCAPE) {</span>
+<span class="nc" id="L293">            screen.gameState = screen.pauseState;</span>
+        }
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Handles keyboard input during the pause state.
+     * &lt;p&gt;
+     * Sets the 'Enter' key flag on 'Enter' key press, triggers a sound effect,
+     * and adjusts the command number based on 'W' and 'S' key presses.
+     * Also handles music and SFX adjustments on 'Up' and 'Down' arrow key presses.
+     *
+     * @author Nicole Malku
+     * @param code The appropriate key code input
+     * @see #adjustCommandNum(int, int)
+     * @see #handleVolumeAdjustment(int)
+     */
+    private void handlePauseInput(int code) {
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (code == KeyEvent.VK_ENTER) {</span>
+<span class="fc" id="L311">            enterPressed = true;</span>
+        }
+<span class="fc" id="L313">        screen.startSFX(5);</span>
+<span class="fc" id="L314">        int maxCommandNum = 0;</span>
+<span class="pc bpc" id="L315" title="2 of 3 branches missed.">        switch (screen.ui.subState) {</span>
+            case 0:
+<span class="fc" id="L317">                maxCommandNum = 4;</span>
+<span class="fc" id="L318">                break;</span>
+            case 2:
+<span class="nc" id="L320">                maxCommandNum = 1;</span>
+                break;
+        }
+<span class="fc bfc" id="L323" title="All 2 branches covered.">        if (code == KeyEvent.VK_W) {</span>
+<span class="fc" id="L324">            adjustCommandNum(-1, maxCommandNum);</span>
+        } 
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        else if (code == KeyEvent.VK_S) {</span>
+<span class="fc" id="L327">            adjustCommandNum(1, maxCommandNum);</span>
+        } 
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        else if (code == KeyEvent.VK_DOWN) {</span>
+<span class="nc" id="L330">            handleVolumeAdjustment(code);</span>
+        } 
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">        else if (code == KeyEvent.VK_UP) {</span>
+<span class="nc" id="L333">            handleVolumeAdjustment(code);</span>
+        }
+<span class="fc" id="L335">    }</span>
+
+    /**
+     * Handles both music and SFX adjustments based on 'Up' and 'Down' arrow key presses.
+     * &lt;p&gt;
+     * Adjusts the volume sliders for music and SFX and plays selection sound effects on each click.
+     *
+     * @author Nicole Malku
+     * @param code The appropriate key code input
+     */
+    private void handleVolumeAdjustment(int code) {
+<span class="nc bnc" id="L346" title="All 2 branches missed.">        if(code == KeyEvent.VK_DOWN){</span>
+<span class="nc bnc" id="L347" title="All 2 branches missed.">                if(screen.ui.subState ==0){</span>
+<span class="nc bnc" id="L348" title="All 4 branches missed.">                    if(screen.ui.commandNum  == 0 &amp;&amp; screen.music.volSlider&gt;0){</span>
+<span class="nc" id="L349">                        screen.music.volSlider --;</span>
+<span class="nc" id="L350">                        screen.music.volume();</span>
+<span class="nc" id="L351">                        screen.startSFX(5);</span>
+                    }
+<span class="nc bnc" id="L353" title="All 4 branches missed.">                    if(screen.ui.commandNum  == 1 &amp;&amp; screen.sfx.volSlider&gt;0){</span>
+<span class="nc" id="L354">                        screen.sfx.volSlider --;</span>
+<span class="nc" id="L355">                        screen.sfx.volume();</span>
+<span class="nc" id="L356">                        screen.startSFX(5);</span>
+                    }
+                }
+            }
+<span class="nc bnc" id="L360" title="All 2 branches missed.">            if(code == KeyEvent.VK_UP){</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">                if(screen.ui.subState ==0){</span>
+<span class="nc bnc" id="L362" title="All 4 branches missed.">                    if(screen.ui.commandNum == 0 &amp;&amp; screen.music.volSlider&lt;5){</span>
+<span class="nc" id="L363">                        screen.music.volSlider ++;</span>
+<span class="nc" id="L364">                        screen.music.volume();</span>
+<span class="nc" id="L365">                        screen.startSFX(5);</span>
+                    }
+<span class="nc bnc" id="L367" title="All 4 branches missed.">                    if(screen.ui.commandNum  == 1 &amp;&amp; screen.sfx.volSlider&lt;5){</span>
+<span class="nc" id="L368">                        screen.sfx.volSlider ++;</span>
+<span class="nc" id="L369">                        screen.sfx.volume();</span>
+<span class="nc" id="L370">                        screen.startSFX(5);</span>
+                    }
+                }
+            }
+<span class="nc" id="L374">    }</span>
+
+    /**
+     * Handles keyboard input during the loss screen
+     * &lt;p&gt;
+     * Adjusts the command number based on 'A' and 'D' key presses
+     * and calls handleLossStateEnter() to deal with the 'Enter' key press.
+     *
+     * @author Nicole Malku
+     * @param code The appropriate key code input
+     * @see #adjustCommandNum(int, int)
+     * @see #handleLossStateEnter()
+     */
+    private void handleLossStateInput(int code) {
+<span class="fc bfc" id="L388" title="All 2 branches covered.">        if (code == KeyEvent.VK_A) {</span>
+<span class="fc" id="L389">            adjustCommandNum(-1, 1);</span>
+<span class="fc bfc" id="L390" title="All 2 branches covered.">        } else if (code == KeyEvent.VK_D) {</span>
+<span class="fc" id="L391">            adjustCommandNum(1, 1);</span>
+<span class="pc bpc" id="L392" title="1 of 2 branches missed.">        } else if (code == KeyEvent.VK_ENTER) {</span>
+<span class="fc" id="L393">            handleLossStateEnter();</span>
+        }
+<span class="fc" id="L395">    }</span>
+
+    /**
+     * Handles the action made by the 'Enter' key press during the loss screen
+     * &lt;p&gt;
+     * If the command number is 0, it switches to the title screen and restarts the game.
+     * If the command number is 1, stops the music, plays a sound effect, and exits the game.
+     * 
+     * @author Nicole Malku
+     */
+    private void handleLossStateEnter() {
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">        if (screen.ui.commandNum == 0) {</span>
+<span class="fc" id="L407">            screen.gameState = screen.titleState;</span>
+<span class="fc" id="L408">            screen.restart();</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">        } else if (screen.ui.commandNum == 1) {</span>
+<span class="nc" id="L410">            screen.stopMusic();</span>
+<span class="nc" id="L411">            screen.startSFX(7);</span>
+            try {
+<span class="nc" id="L413">                Thread.sleep(700);</span>
+<span class="nc" id="L414">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L415">                Thread.currentThread().interrupt();</span>
+<span class="nc" id="L416">            }</span>
+<span class="nc" id="L417">            System.exit(0);</span>
+        }
+<span class="fc" id="L419">    }</span>
+
+     /**
+     * Adjusts the command number by a specified amount within a given max.
+     * &lt;p&gt;
+     * Increments or decrements the command number by the adjustment value
+     * Triggers a sound effect upon adjustment.
+     *
+     * @param adjustment The amount by which to adjust the command number
+     * @param max The max for the command number
+     */
+    private void adjustCommandNum(int adjustment, int max) {
+<span class="fc" id="L431">        screen.ui.commandNum += adjustment;</span>
+<span class="fc" id="L432">        screen.startSFX(5);</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (screen.ui.commandNum &lt; 0) {</span>
+<span class="fc" id="L434">            screen.ui.commandNum = max;</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        } else if (screen.ui.commandNum &gt; max) {</span>
+<span class="fc" id="L436">            screen.ui.commandNum = 0;</span>
+        }
+<span class="fc" id="L438">    }</span>
+
+    /**
+     * Handles the release of clicking a key
+     * 
+     * @author Nicole Malku
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+<span class="fc" id="L447">        int code = e.getKeyCode();</span>
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">        if(code == KeyEvent.VK_W){</span>
+<span class="nc" id="L449">            upKey = false;</span>
+        }
+<span class="fc bfc" id="L451" title="All 2 branches covered.">        if(code == KeyEvent.VK_A){</span>
+<span class="fc" id="L452">            leftKey = false;   </span>
+        }
+<span class="fc bfc" id="L454" title="All 2 branches covered.">        if(code == KeyEvent.VK_S){</span>
+<span class="fc" id="L455">            downKey = false;  </span>
+        }
+<span class="fc bfc" id="L457" title="All 2 branches covered.">        if(code == KeyEvent.VK_D){</span>
+<span class="fc" id="L458">            rightKey = false;  </span>
+        }
+
+<span class="fc" id="L461">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

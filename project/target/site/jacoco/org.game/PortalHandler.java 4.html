@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PortalHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">PortalHandler.java</span></div><h1>PortalHandler.java</h1><pre class="source lang-java linenums">package org.game;
+
+/**
+ * Class dedicated to handling the timing and behaviour of portals
+ */
+public class PortalHandler {
+    
+    String name;
+    GameScreen screen;
+    
+    /**
+     * PortalHandler constructor
+     * 
+     * @Author Ryan Chong
+     * @param screen
+     */
+<span class="fc" id="L17">    public PortalHandler(GameScreen screen){</span>
+<span class="fc" id="L18">        this.screen = screen;</span>
+<span class="fc" id="L19">    }</span>
+
+    /**
+     * Main portal handler helper function that runs on each game tick.
+     * Checks to see if the player is contact with a portal.
+     * If so, telports the player.
+     * @param portal
+     */
+    public void checkportal(Portal portal) {
+        
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if(hit(portal)==true){</span>
+        {
+<span class="nc" id="L31">        int tpX = portal.partner.worldX;</span>
+<span class="nc" id="L32">        int tpY = portal.partner.worldY;</span>
+
+<span class="nc" id="L34">        screen.player.worldX = tpX;</span>
+<span class="nc" id="L35">        screen.player.worldY = tpY;</span>
+<span class="nc" id="L36">        screen.player.canPortal=60;</span>
+<span class="nc" id="L37">        screen.startSFX(9);</span>
+        }
+    }
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Helper function to checkportal() to see if player is in collision with a portal.
+     * 
+     * @param portal
+     * @return boolean
+     * @Author Ryan
+     */
+    public boolean hit(Portal portal){
+        //System.out.println(&quot;Checking hit&quot;);
+<span class="nc" id="L51">        boolean hit = false;</span>
+
+<span class="nc" id="L53">        screen.player.solidArea.x = screen.player.worldX + screen.player.solidArea.x;</span>
+<span class="nc" id="L54">        screen.player.solidArea.y = screen.player.worldY + screen.player.solidArea.y;</span>
+<span class="nc" id="L55">        portal.Rectangle.x = portal.worldX + portal.Rectangle.x;</span>
+<span class="nc" id="L56">        portal.Rectangle.y = portal.worldY + portal.Rectangle.y;</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if(screen.player.solidArea.intersects(portal.Rectangle)){</span>
+<span class="nc" id="L59">            hit = true;</span>
+    
+        }
+
+<span class="nc" id="L63">        screen.player.solidArea.x = screen.player.solidAreaDefaultX;</span>
+<span class="nc" id="L64">        screen.player.solidArea.y = screen.player.solidAreaDefaultY;</span>
+<span class="nc" id="L65">        portal.Rectangle.x = portal.rectDefaultX;</span>
+<span class="nc" id="L66">        portal.Rectangle.y = portal.rectDefaultY;</span>
+
+<span class="nc" id="L68">        return hit; </span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

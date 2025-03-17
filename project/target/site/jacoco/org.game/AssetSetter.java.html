@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AssetSetter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.game</a> &gt; <span class="el_source">AssetSetter.java</span></div><h1>AssetSetter.java</h1><pre class="source lang-java linenums">package org.game;
+
+import org.alien.ALIEN_green;
+import org.object.BonusReward;
+import org.object.Entrance;
+import org.object.PowerUp;
+import org.object.Punishment;
+import org.object.RegularReward;
+import org.object.Rocket;
+import java.util.*;
+
+/**
+ * The AssetSetter class is responsible for setting up and updating game assets based on the current game state.
+ * It initializes random time intervals for bonus rewards and provides methods to clear and update game objects
+ * and set the object map for different game states.
+ * &lt;p&gt;
+ * The class includes methods for clearing objects, updating the game state based on time intervals,
+ * and setting the initial object map for different game levels.
+ * 
+ * @author Curtis Pu
+ * @author Nicole Malku
+ * @author Usman Aziz
+ * @author Ryan Chong
+ */
+public class AssetSetter {
+
+<span class="fc" id="L27">    Random r = new Random();</span>
+    int time1, time2, time3,time4,time5,time6,counter;
+    GameScreen screen;
+
+    /**
+     * Asset setter constructor, determines start times for each maps' bonus reward
+     * 
+     * 
+     * @param screen
+     */
+<span class="fc" id="L37">    public AssetSetter(GameScreen screen){</span>
+<span class="fc" id="L38">        this.screen = screen;</span>
+<span class="fc" id="L39">        time1 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L40">        time2 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L41">        time3 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L42">        time4 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L43">        time5 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L44">        time6 = r.nextInt(3,15) * 60;</span>
+<span class="fc" id="L45">    }</span>
+    
+    /**
+     * Clears the arrays of objects, enemies and portals for the current map
+     * 
+     * 
+     */
+    public void clear(){
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for(int i = 0; i &lt;20; i ++){</span>
+<span class="fc" id="L54">            screen.obj[i] = null;</span>
+<span class="fc" id="L55">            screen.alien[i] = null;</span>
+<span class="fc" id="L56">            screen.portal[i] = null;</span>
+        }
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Helper function to update the bonus rewards on each level, creates the bonus rewards
+     * 
+     * 
+     * @param gameState
+     */
+    public void update(int gameState){
+<span class="fc" id="L67">        counter++;</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        if(gameState == 1 &amp;&amp; counter == time1){</span>
+<span class="fc" id="L69">            screen.obj[19]= new BonusReward(7,5);</span>
+        }
+<span class="fc bfc" id="L71" title="All 4 branches covered.">        if(gameState == 2 &amp;&amp; counter == time2){</span>
+<span class="fc" id="L72">            screen.obj[19]= new BonusReward(19,8);</span>
+        }
+<span class="fc bfc" id="L74" title="All 4 branches covered.">        if(gameState == 3 &amp;&amp; counter == time3){</span>
+<span class="fc" id="L75">            screen.obj[19]= new BonusReward(19,4);</span>
+        }
+<span class="fc bfc" id="L77" title="All 4 branches covered.">        if(gameState == 4 &amp;&amp; counter == time4){</span>
+<span class="fc" id="L78">            screen.obj[19]= new BonusReward(10,5);</span>
+        }
+<span class="fc bfc" id="L80" title="All 4 branches covered.">        if(gameState == 5 &amp;&amp; counter == time5){</span>
+<span class="fc" id="L81">            screen.obj[19]= new BonusReward(12,6);</span>
+        }
+<span class="fc bfc" id="L83" title="All 4 branches covered.">        if(gameState == 6 &amp;&amp; counter == time6){</span>
+<span class="fc" id="L84">            screen.obj[19]= new BonusReward(8,5);</span>
+        }
+<span class="fc" id="L86">    }</span>
+    
+    /**
+     * Main Asset Setter function to generate all objects in the game on each level;
+     * 
+     * 
+     * @param gameState current gamestate
+     */
+    public void setObjectMap(int gameState){
+<span class="fc" id="L95">        counter = 0;</span>
+<span class="pc bpc" id="L96" title="1 of 7 branches missed.">        switch(gameState){</span>
+        case 1:
+        //MAP1
+<span class="fc" id="L99">        screen.player.worldX = 2 *screen.tileSize;</span>
+<span class="fc" id="L100">        screen.player.worldY = 1 *screen.tileSize;</span>
+
+<span class="fc" id="L102">        screen.obj[0] = new RegularReward(6,2);</span>
+
+<span class="fc" id="L104">        screen.obj[1] = new RegularReward(15,9);</span>
+
+<span class="fc" id="L106">        screen.obj[2] = new Rocket(19,1);</span>
+
+<span class="fc" id="L108">        screen.obj[3] = new PowerUp(11,6);</span>
+
+<span class="fc" id="L110">        screen.obj[4] = new Entrance(1,1);</span>
+        
+<span class="fc" id="L112">        screen.obj[5] = new Punishment(10,9);</span>
+
+<span class="fc" id="L114">        screen.alien[0] = new ALIEN_green(screen,6,2);</span>
+<span class="fc" id="L115">        screen.alien[1] = new ALIEN_green(screen,19,7);</span>
+
+<span class="fc" id="L117">        screen.portal[0] = new Portal(11,3);</span>
+<span class="fc" id="L118">        screen.portal[1] = new Portal(14,6);</span>
+<span class="fc" id="L119">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L120">        screen.portal[1].partner = screen.portal[0];</span>
+<span class="fc" id="L121">        break;</span>
+
+        case 2:
+
+<span class="fc" id="L125">        screen.player.worldX = 1 *screen.tileSize;</span>
+<span class="fc" id="L126">        screen.player.worldY = 2 *screen.tileSize;</span>
+
+<span class="fc" id="L128">        screen.obj[0] = new RegularReward(1,8);</span>
+
+<span class="fc" id="L130">        screen.obj[1] = new RegularReward(12,1);</span>
+
+<span class="fc" id="L132">        screen.obj[2] = new Rocket(19,1);</span>
+        
+<span class="fc" id="L134">        screen.obj[3] = new PowerUp(8,6);</span>
+
+<span class="fc" id="L136">        screen.obj[4] = new Entrance(1,1);</span>
+
+<span class="fc" id="L138">        screen.obj[5] = new Punishment(10,6);</span>
+<span class="fc" id="L139">        screen.obj[6] = new Punishment(11,6);</span>
+        
+<span class="fc" id="L141">        screen.alien[0] = new ALIEN_green(screen,11,4);</span>
+<span class="fc" id="L142">        screen.alien[1] = new ALIEN_green(screen,17,1);</span>
+
+
+<span class="fc" id="L145">        screen.portal[0] = new Portal(6,1);</span>
+<span class="fc" id="L146">        screen.portal[1] = new Portal(7,8);</span>
+<span class="fc" id="L147">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L148">        screen.portal[1].partner = screen.portal[0];</span>
+<span class="fc" id="L149">        break;</span>
+
+        case 3:
+
+<span class="fc" id="L153">        screen.player.worldX = 1 *screen.tileSize;</span>
+<span class="fc" id="L154">        screen.player.worldY = 2 *screen.tileSize;</span>
+
+<span class="fc" id="L156">        screen.obj[0] = new RegularReward(10,3);</span>
+
+<span class="fc" id="L158">        screen.obj[1] = new RegularReward(10,7);</span>
+
+<span class="fc" id="L160">        screen.obj[2] = new Rocket(19,9);</span>
+
+<span class="fc" id="L162">        screen.obj[3] = new PowerUp(6,6);</span>
+
+<span class="fc" id="L164">        screen.obj[4] = new Entrance(1,1);</span>
+        
+<span class="fc" id="L166">        screen.obj[5] = new Punishment(5,6);</span>
+<span class="fc" id="L167">        screen.obj[6] = new Punishment(14,6);</span>
+<span class="fc" id="L168">        screen.obj[7] = new Punishment(17,2);</span>
+
+<span class="fc" id="L170">        screen.alien[0] = new ALIEN_green(screen,6,4);</span>
+<span class="fc" id="L171">        screen.alien[1] = new ALIEN_green(screen,13,5);</span>
+
+<span class="fc" id="L173">        screen.portal[0] = new Portal(2,3);</span>
+<span class="fc" id="L174">        screen.portal[1] = new Portal(2,7);</span>
+<span class="fc" id="L175">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L176">        screen.portal[1].partner = screen.portal[0];</span>
+<span class="fc" id="L177">        break;</span>
+        case 4:
+
+<span class="fc" id="L180">        screen.player.worldX = 1 *screen.tileSize;</span>
+<span class="fc" id="L181">        screen.player.worldY = 4 *screen.tileSize;</span>
+        
+<span class="fc" id="L183">        screen.obj[0] = new RegularReward(19,1);</span>
+
+<span class="fc" id="L185">        screen.obj[1] = new RegularReward(19,10);</span>
+
+<span class="fc" id="L187">        screen.obj[2] = new Rocket(6,5);</span>
+
+<span class="fc" id="L189">        screen.obj[3] = new PowerUp(1,7);</span>
+
+<span class="fc" id="L191">        screen.obj[4] = new Entrance(1,3);</span>
+        
+<span class="fc" id="L193">        screen.obj[5] = new Punishment(9,4);</span>
+<span class="fc" id="L194">        screen.obj[6] = new Punishment(11,5);</span>
+<span class="fc" id="L195">        screen.obj[7] = new Punishment(9,6);</span>
+<span class="fc" id="L196">        screen.obj[8] = new Punishment(11,7);</span>
+
+<span class="fc" id="L198">        screen.alien[0] = new ALIEN_green(screen,16,1);</span>
+<span class="fc" id="L199">        screen.alien[1] = new ALIEN_green(screen,16,10);</span>
+<span class="fc" id="L200">        screen.alien[1] = new ALIEN_green(screen,6,6);</span>
+
+<span class="fc" id="L202">        screen.portal[0] = new Portal(15,5);</span>
+<span class="fc" id="L203">        screen.portal[1] = new Portal(13,5);</span>
+<span class="fc" id="L204">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L205">        screen.portal[1].partner = screen.portal[0];</span>
+
+<span class="fc" id="L207">        break;</span>
+
+        case 5:
+
+<span class="fc" id="L211">        screen.player.worldX = 2 *screen.tileSize;</span>
+<span class="fc" id="L212">        screen.player.worldY = 5 *screen.tileSize;</span>
+        
+<span class="fc" id="L214">        screen.obj[0] = new RegularReward(1,8);</span>
+
+<span class="fc" id="L216">        screen.obj[1] = new RegularReward(19,1);</span>
+
+<span class="fc" id="L218">        screen.obj[2] = new Rocket(11,10);</span>
+
+<span class="fc" id="L220">        screen.obj[3] = new PowerUp(10,5);</span>
+
+<span class="fc" id="L222">        screen.obj[4] = new Entrance(1,5);</span>
+
+<span class="fc" id="L224">        screen.obj[5] = new Punishment(4,2);</span>
+<span class="fc" id="L225">        screen.obj[6] = new Punishment(17,2);</span>
+<span class="fc" id="L226">        screen.obj[7] = new Punishment(19,6);</span>
+<span class="fc" id="L227">        screen.obj[8] = new Punishment(7,7);</span>
+<span class="fc" id="L228">        screen.obj[9] = new Punishment(7,6);</span>
+        
+<span class="fc" id="L230">        screen.alien[0] = new ALIEN_green(screen,5,2);</span>
+<span class="fc" id="L231">        screen.alien[1] = new ALIEN_green(screen,7,7);</span>
+<span class="fc" id="L232">        screen.alien[2] = new ALIEN_green(screen,19,4);</span>
+
+<span class="fc" id="L234">        screen.portal[0] = new Portal(8,2);</span>
+<span class="fc" id="L235">        screen.portal[1] = new Portal(5,6);</span>
+<span class="fc" id="L236">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L237">        screen.portal[1].partner = screen.portal[0];</span>
+
+<span class="fc" id="L239">        break;    </span>
+
+        case 6:
+
+<span class="fc" id="L243">        screen.player.worldX = 2 *screen.tileSize;</span>
+<span class="fc" id="L244">        screen.player.worldY = 1 *screen.tileSize;</span>
+        
+<span class="fc" id="L246">        screen.obj[0] = new RegularReward(19,1);</span>
+
+<span class="fc" id="L248">        screen.obj[1] = new RegularReward(1,10);</span>
+
+<span class="fc" id="L250">        screen.obj[2] = new Rocket(19,10);</span>
+
+<span class="fc" id="L252">        screen.obj[3] = new PowerUp(19,5);</span>
+
+<span class="fc" id="L254">        screen.obj[4] = new Entrance(1,1);</span>
+        
+<span class="fc" id="L256">        screen.obj[5] = new Punishment(10,2);</span>
+<span class="fc" id="L257">        screen.obj[6] = new Punishment(11,3);</span>
+<span class="fc" id="L258">        screen.obj[7] = new Punishment(13,9);</span>
+<span class="fc" id="L259">        screen.obj[8] = new Punishment(7,5);</span>
+<span class="fc" id="L260">        screen.obj[9] = new Punishment(14,5);</span>
+<span class="fc" id="L261">        screen.obj[10] = new Punishment(4,5);</span>
+
+<span class="fc" id="L263">        screen.alien[0] = new ALIEN_green(screen,8,5);</span>
+<span class="fc" id="L264">        screen.alien[1] = new ALIEN_green(screen,13,5);</span>
+<span class="fc" id="L265">        screen.alien[2] = new ALIEN_green(screen,19,10);</span>
+<span class="fc" id="L266">        screen.alien[2].speed = 2;</span>
+
+<span class="fc" id="L268">        screen.portal[0] = new Portal(13,1);</span>
+<span class="fc" id="L269">        screen.portal[1] = new Portal(8,10);</span>
+<span class="fc" id="L270">        screen.portal[0].partner = screen.portal[1];</span>
+<span class="fc" id="L271">        screen.portal[1].partner = screen.portal[0];</span>
+
+        break;
+    }
+
+
+<span class="fc" id="L277">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

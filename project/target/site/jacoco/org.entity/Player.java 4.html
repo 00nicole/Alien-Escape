@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">org.entity</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package org.entity;
+
+import org.game.KeyboardInput;
+import org.object.SuperObject;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import org.game.GameScreen;
+
+/**
+ * The Player class represents the player character in the game. It extends the base Entity class and
+ * includes methods for updating the player's position, handling user input, and drawing the character on the screen.
+ * Additionally, it contains methods for loading player character images and managing interactions with game objects.
+ *
+ * @author Nicole Malku
+ * @author Usman Aziz
+ * @author Curtis Pu
+ * @author Ryan Chong
+ */
+
+public class Player extends Entity {
+    KeyboardInput keyInput;
+<span class="fc" id="L26">    public int hasPlanet = 0;</span>
+<span class="fc" id="L27">    public int canPortal = 0;</span>
+<span class="fc" id="L28">    public int score = 0;</span>
+
+    /**
+     * Constructs a Player object associated with GameScreen and KeyboardInput instance.
+     * This constructor initializes the player's screen coordinates, collision area, and default values.
+     * It also sets up the player's starting position and loads the player character images.
+     *
+     *
+     * @author Usman Aiz
+     * @author Nicole Malku
+     *
+     * @param screen The GameScreen instance to associate with this Player.
+     * @param keyInput The KeyboardInput instance to handle user input.
+     */
+<span class="fc" id="L42">    public Player(GameScreen screen, KeyboardInput keyInput){</span>
+<span class="fc" id="L43">        this.screen = screen;</span>
+<span class="fc" id="L44">        this.keyInput = keyInput;</span>
+
+<span class="fc" id="L46">        solidArea.x = 6;</span>
+<span class="fc" id="L47">        solidArea.y = 2;</span>
+<span class="fc" id="L48">        solidArea.width = 20;</span>
+<span class="fc" id="L49">        solidArea.height = 30;</span>
+
+        //solidArea.y + solidArea.height = 32!!!
+
+<span class="fc" id="L53">        solidAreaDefaultX = solidArea.x;</span>
+<span class="fc" id="L54">        solidAreaDefaultY = solidArea.y;</span>
+
+<span class="fc" id="L56">        setDefaultVals();</span>
+<span class="fc" id="L57">        getImage();</span>
+<span class="fc" id="L58">    }</span>
+
+    public void start(int map){
+<span class="nc" id="L61">        switch(map){</span>
+            case 1:
+        }
+
+<span class="nc" id="L65">    }</span>
+    public void setDefaultVals(){
+<span class="fc" id="L67">        worldX = (screen.tileSize);</span>
+<span class="fc" id="L68">        worldY = (screen.tileSize);</span>
+<span class="fc" id="L69">        speed = 3;</span>
+        //player status
+<span class="fc" id="L71">        maxLife = 6;</span>
+<span class="fc" id="L72">        life = maxLife;</span>
+<span class="fc" id="L73">    }</span>
+
+    public void setDefaultPositions(){
+<span class="fc" id="L76">        worldX = (screen.tileSize);</span>
+<span class="fc" id="L77">        worldY = (screen.tileSize);</span>
+<span class="fc" id="L78">    }</span>
+
+    public void restoreLife(){
+<span class="fc" id="L81">        life = maxLife;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Loads images for different directions and animation frames of the player character.
+     * &lt;p&gt;
+     * This method uses the ImageIO class to read images from the specified file paths for
+     * various directions (left, right, up, down) and animation frames (1, 2). The loaded images
+     * are assigned to the corresponding variables (l1, l2, r1, r2, f1, f2, b1, b2) for
+     * later use in drawing the player's character.
+     * 
+     * @author Nicole Malku
+     * @author Usman Aziz
+     * @author Ryan Chong
+     */
+    public void getImage(){
+        try {
+            // Load player character images for different directions and frames
+<span class="fc" id="L99">            l1 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_l1.png&quot;));</span>
+<span class="fc" id="L100">            l2 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_l2.png&quot;));</span>
+<span class="fc" id="L101">            r1 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_r1.png&quot;));</span>
+<span class="fc" id="L102">            r2 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_r2.png&quot;));</span>
+<span class="fc" id="L103">            f1 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_f1.png&quot;));</span>
+<span class="fc" id="L104">            f2 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_f2.png&quot;));</span>
+<span class="fc" id="L105">            b1 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_b1.png&quot;));</span>
+<span class="fc" id="L106">            b2 = ImageIO.read(getClass().getResourceAsStream(&quot;/astronauts/gray/gray_b2.png&quot;));</span>
+    
+<span class="nc" id="L108">        } catch (IOException e) {</span>
+<span class="nc" id="L109">            e.printStackTrace();</span>
+<span class="fc" id="L110">        }</span>
+<span class="fc" id="L111">    }</span>
+    
+    /**
+     * Updates the position and state of the player object based on user input and collisions.
+     * &lt;p&gt;
+     * This method checks the state of W,A,S,D keys (up, left, down, right) and updates
+     * the player's position accordingly. It then performs collision detection with the game world
+     * tiles and other objects. If a collision occurs with an object, it triggers the corresponding
+     * action, such as consumption or loss checking.
+     * &lt;p&gt;
+     * The method also manages a side-switching mechanism for animation purposes when the player
+     * is in motion.
+     * 
+     * @author Nicole Malku
+     * @author Usman Aziz
+     * @author Ryan Chong
+     */
+    public void update(){
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if(keyInput.upKey)  { side = &quot;up&quot;; }</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if(keyInput.leftKey){ side = &quot;left&quot;; }</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if(keyInput.downKey){ side = &quot;down&quot;; }</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if(keyInput.rightKey){side = &quot;right&quot;; }</span>
+
+<span class="fc" id="L134">        collisionOn = false;</span>
+<span class="fc" id="L135">        screen.cChecker.checkTile((this));</span>
+
+        //Handling Object collision
+<span class="fc" id="L138">        int otherIndex = screen.cChecker.checkOther(this,true);</span>
+<span class="fc" id="L139">        consumeObject(otherIndex);</span>
+<span class="fc" id="L140">        checkLoss();</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if(canPortal &gt; 0){</span>
+<span class="nc" id="L143">            canPortal--;</span>
+        }
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        for(int i = 0; screen.portal[i] != null; i++ )</span>
+        {   
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            if(canPortal == 0){</span>
+<span class="nc" id="L148">            screen.portalHandler.checkportal(screen.portal[i]);</span>
+            }
+        }
+
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        for(int i = 0; i &lt; screen.obj.length; i++ )</span>
+        {   
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            if(screen.obj[i]!=null){</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                if(screen.obj[i].update() == 1){</span>
+<span class="nc" id="L156">                screen.obj[i] = new SuperObject();</span>
+                }
+            }
+        }
+
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if(!collisionOn){</span>
+<span class="fc bfc" id="L162" title="All 8 branches covered.">            if(keyInput.upKey || keyInput.leftKey || keyInput.downKey || keyInput.rightKey){</span>
+<span class="fc" id="L163">                this.move(side);</span>
+
+<span class="fc" id="L165">                sideSwitcher++;</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">                if(sideSwitcher &gt;15){</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                    if(sideNum == 1){</span>
+<span class="nc" id="L168">                        sideNum =2;</span>
+                    }
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                    else if(sideNum == 2){</span>
+<span class="nc" id="L171">                        sideNum= 1;</span>
+                    }
+<span class="nc" id="L173">                    sideSwitcher =0;</span>
+        
+                }
+            }
+            
+        }
+<span class="fc" id="L179">    }</span>
+    /**
+     * Consumes game objects based on collision index and updates the player's status accordingly.
+     *
+     * @author Nicole Malku
+     * @author Usman Aziz
+     * @param index The index of the collided object in the game object array.
+     */
+    public void consumeObject(int index){
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if(index != 999){</span>
+<span class="fc" id="L189">            String objectName =screen.obj[index].name;</span>
+<span class="pc bpc" id="L190" title="2 of 6 branches missed.">            switch(objectName){</span>
+            case &quot;RegularReward&quot;:
+<span class="fc" id="L192">                screen.startSFX(1);</span>
+<span class="fc" id="L193">                hasPlanet ++;</span>
+<span class="fc" id="L194">                score+=200;</span>
+<span class="fc" id="L195">                screen.obj[index] = null;</span>
+<span class="fc" id="L196">                screen.ui.showMessage(&quot;Regular Reward Collected.&quot;);</span>
+                //checkWin();
+<span class="fc" id="L198">                break;</span>
+            case &quot;BonusReward&quot;:
+<span class="fc" id="L200">                screen.startSFX(1);</span>
+<span class="fc" id="L201">                score= score*2;</span>
+<span class="fc" id="L202">                screen.obj[index] = null;</span>
+<span class="fc" id="L203">                screen.ui.showMessage(&quot;Double Score!!&quot;);</span>
+<span class="fc" id="L204">                break;</span>
+            case &quot;Punishment&quot;:
+<span class="nc" id="L206">                screen.startSFX(10);</span>
+<span class="nc" id="L207">                score-=150;</span>
+<span class="nc" id="L208">                screen.obj[index] = null;</span>
+<span class="nc" id="L209">                screen.ui.showMessage(&quot;PUNISHMENT!&quot;);</span>
+<span class="nc" id="L210">                break;</span>
+            case &quot;PowerUp&quot;:
+<span class="fc" id="L212">                screen.startSFX(1);</span>
+<span class="fc" id="L213">                score+=200;</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                if(life&lt;6)</span>
+<span class="nc" id="L215">                    life++;</span>
+<span class="fc" id="L216">                screen.obj[index] = null;</span>
+<span class="fc" id="L217">                screen.ui.showMessage(&quot;Life +1&quot;);</span>
+                //checkWin();
+<span class="fc" id="L219">                break;</span>
+            case &quot;Rocket&quot;:
+<span class="fc" id="L221">                checkWin();</span>
+                break;
+            }
+
+        }
+<span class="fc" id="L226">    }</span>
+
+    /**
+     * 
+     * Helper function to continually check if the player has won the game/level. Facilitiates transition between maps.
+     * 
+     * @Author Ryan Chong
+     */
+    public void checkWin(){ 
+
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if(hasPlanet == 12){</span>
+<span class="fc" id="L237">            screen.stopMusic();</span>
+            try {
+<span class="fc" id="L239">                Thread.sleep(700);              </span>
+<span class="nc" id="L240">            } catch(InterruptedException ex) {</span>
+<span class="nc" id="L241">                Thread.currentThread().interrupt();</span>
+<span class="fc" id="L242">            }</span>
+<span class="fc" id="L243">            screen.startMusic(2);</span>
+<span class="fc" id="L244">            screen.gameState=screen.winState;</span>
+<span class="fc" id="L245">            screen.ui.endGame=true;</span>
+<span class="fc" id="L246">            return;</span>
+        }
+<span class="pc bpc" id="L248" title="1 of 4 branches missed.">        if(hasPlanet == 2 * screen.gameState &amp;&amp; hasPlanet &gt;= 2){</span>
+<span class="fc" id="L249">        screen.gameState++;</span>
+<span class="fc" id="L250">        screen.latestPlayState= screen.gameState;</span>
+<span class="fc" id="L251">        screen.ui.endGame=true;</span>
+<span class="fc" id="L252">        screen.mapM.loadMap(screen.mapM.maptxt[screen.gameState]);</span>
+
+<span class="fc" id="L254">        screen.currentMapIMGpath = screen.mapM.mapIMG[screen.gameState];</span>
+<span class="fc" id="L255">        screen.aSetter.clear();</span>
+<span class="fc" id="L256">        screen.aSetter.setObjectMap(screen.gameState);</span>
+        }
+<span class="fc" id="L258">    }</span>
+
+    /**
+     * Helper function to check if the player has lost the game
+     * 
+     * @Author Ryan Chong
+     */
+    public void checkLoss(){ 
+<span class="fc bfc" id="L266" title="All 4 branches covered.">        if(life &lt;= 0 || score &lt;0){</span>
+<span class="fc" id="L267">            screen.stopMusic();</span>
+            //screen.startSFX(8);
+            try {
+<span class="fc" id="L270">                Thread.sleep(700);              </span>
+<span class="nc" id="L271">            } catch(InterruptedException ex) {</span>
+<span class="nc" id="L272">                Thread.currentThread().interrupt();</span>
+<span class="fc" id="L273">            }</span>
+<span class="fc" id="L274">            screen.startMusic(11);</span>
+            //screen.player.score=0;
+<span class="fc" id="L276">            screen.gameState = screen.lossState;</span>
+<span class="fc" id="L277">            screen.latestPlayState = 1;</span>
+<span class="fc" id="L278">            screen.ui.commandNum = -1;</span>
+<span class="fc" id="L279">            screen.ui.endGame=true;</span>
+
+        }
+<span class="fc" id="L282">    }</span>
+
+    /**
+     * Draws the player character using the correct images based onthe current direction and animation frame.
+     * 
+     * @author Nicole Malku
+     * @param myGraphics The Graphics2D context on which to draw the player character.
+     */
+    public void draw(Graphics2D myGraphics){
+<span class="nc" id="L291">       BufferedImage img = null;</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">       if(side == &quot;up&quot;){</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if(sideNum ==1){</span>
+<span class="nc" id="L294">                img = b1;</span>
+            }
+<span class="nc bnc" id="L296" title="All 2 branches missed.">            else if(sideNum ==2){</span>
+<span class="nc" id="L297">                img = b2;</span>
+            }
+       }
+<span class="nc bnc" id="L300" title="All 2 branches missed.">       else if(side == &quot;down&quot;){</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">            if(sideNum ==1){</span>
+<span class="nc" id="L302">                img = f1;</span>
+            }
+<span class="nc bnc" id="L304" title="All 2 branches missed.">            else if(sideNum ==2){</span>
+<span class="nc" id="L305">                img = f2;</span>
+            }
+       }
+<span class="nc bnc" id="L308" title="All 2 branches missed.">       else if(side == &quot;left&quot;){</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if(sideNum ==1){</span>
+<span class="nc" id="L310">                img = l1;</span>
+            }
+<span class="nc bnc" id="L312" title="All 2 branches missed.">            else if(sideNum ==2){</span>
+<span class="nc" id="L313">                img = l2;</span>
+            }
+       }
+<span class="nc bnc" id="L316" title="All 2 branches missed.">       else if(side == &quot;right&quot;){</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">            if(sideNum ==1){</span>
+<span class="nc" id="L318">                img = r1;</span>
+            }
+<span class="nc bnc" id="L320" title="All 2 branches missed.">            else if(sideNum ==2){</span>
+<span class="nc" id="L321">                img = r2;</span>
+            }
+       }
+<span class="nc" id="L324">       myGraphics.drawImage(img, worldX, worldY, screen.tileSize, screen.tileSize, null);</span>
+<span class="nc" id="L325">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

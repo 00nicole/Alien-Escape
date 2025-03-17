@@ -1,0 +1,36 @@
+
+]
+java:S1192Œ"FDefine a constant instead of duplicating this literal "right" 3 times.(î¹ø°
+F
+java:S1066¤"/Merge this if statement with the enclosing one.(ªşÒ
+F
+java:S1066«"/Merge this if statement with the enclosing one.(ä«ÃÆ
+f
+java:S1301C"KReplace this "switch" statement by "if" statements to increase readability.(÷Óšşÿÿÿÿ
+p
+java:S1104"UMake hasPlanet a static final constant or non-public and provide accessors if needed.(»º©«ıÿÿÿÿ
+p
+java:S1104"UMake canPortal a static final constant or non-public and provide accessors if needed.(É•ˆ˜ûÿÿÿÿ
+l
+java:S1104"QMake score a static final constant or non-public and provide accessors if needed.(‹†ªÓıÿÿÿÿ
+S
+java:S4973³"<Strings and Boxed types should be compared using "equals()".(±èó§
+X
+java:S4973»"<Strings and Boxed types should be compared using "equals()".(Ç·“Óüÿÿÿÿ
+X
+java:S4973Ã"<Strings and Boxed types should be compared using "equals()".(ÚĞş»ùÿÿÿÿ
+X
+java:S4973Ë"<Strings and Boxed types should be compared using "equals()".(ğ˜Ùùşÿÿÿÿ
+A
+java:S2387","screen" is the name of a field in "Entity".(à«Ã)
+<	java:S131C""Add a default case to this switch.(÷Óšşÿÿÿÿ
+i
+java:S3776ˆ"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(Ö×õÄ
+=	java:S131¬""Add a default case to this switch.(Š¼üáÿÿÿÿÿ
+=	java:S131Í""Add a default case to this switch.(²¯¹µşÿÿÿÿ
+W	java:S125Ô"<This block of commented-out lines of code should be removed.(ûšØüúÿÿÿÿ
+W	java:S125é"<This block of commented-out lines of code should be removed.(ûšØüúÿÿÿÿ
+R	java:S125›"<This block of commented-out lines of code should be removed.(ı¿±¸
+W	java:S125¢"<This block of commented-out lines of code should be removed.(‡¡«üÿÿÿÿÿ
+p
+java:S3776±"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÆŸÃ¢8°£úÂ1
